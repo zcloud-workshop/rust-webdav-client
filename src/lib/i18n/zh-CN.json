@@ -19,6 +19,7 @@
     "test": "测试",
     "testing": "测试中...",
     "cancel": "取消",
+    "delete": "删除",
     "testSuccess": "连接成功！",
     "testFailed": "连接失败",
     "testError": "连接错误：{error}",

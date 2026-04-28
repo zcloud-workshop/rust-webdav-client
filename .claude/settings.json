@@ -1,36 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "mcp__zread__get_repo_structure",
-      "Bash(pnpm --version)",
-      "Bash(cargo --version)",
-      "Bash(npm --version)",
-      "Read(~/.cargo/bin/**)",
-      "Read(~/.rustup/**)",
-      "Bash(export PATH=\"$HOME/.cargo/bin:$HOME/.nvm/versions/node/v24.13.0/bin:$PATH\")",
-      "Bash(rustc --version)",
-      "Bash(npm install *)",
-      "Bash(pnpm create *)",
-      "Bash(pnpm install *)",
-      "Bash(pnpm add *)",
-      "Bash(cargo check *)",
-      "Read(~/.cargo/registry/src/**)",
-      "Bash(npx tauri *)",
-      "Bash(python3 -c ' *)",
-      "Bash(npx vite *)",
-      "Bash(git add *)",
-      "Bash(git commit -m  *)",
-      "Bash(git push *)",
-      "Bash(convert --version)",
-      "Bash(node scripts/squircle-icon.js)",
-      "Bash(grep -E \"\\\\.\\(png|ico|icns\\)$\")",
-      "Bash(git commit -a -m *)",
-      "Skill(update-config)",
-      "Skill(update-config:*)",
-      "Bash(npx svelte-check *)"
-    ],
-    "additionalDirectories": [
-      "~/.claude/plans"
     ]
   }
 }

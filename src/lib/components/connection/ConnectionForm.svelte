@@ -2,7 +2,7 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import { _, t } from "svelte-i18n";
-  import { saveProfile, testConnection, getProfiles } from "../../stores/connections.svelte";
+  import { saveProfile, testConnection, getProfiles, deleteProfile } from "../../stores/connections.svelte";
   import { showToast } from "../../stores/toast.svelte";
   import type { ConnectionProfile } from "../../types";
 
@@ -84,6 +84,22 @@
       testing = false;
     }
   }
+
+  /** 删除连接配置 */
+  async function handleDelete() {
+    if (!editId) return;
+    const profileName = getProfiles().find((p) => p.id === editId)?.name;
+    if (!confirm($t("dialog.deleteConfirm", { values: { name: profileName || "" } }))) {
+      return;
+    }
+    try {
+      await deleteProfile(editId);
+      showToast($t("toolbar.deleted"), "success");
+      onClose();
+    } catch (e) {
+      showToast($t("toolbar.deleteFailed", { values: { error: String(e) } }), "error");
+    }
+  }
 </script>
 
 <div class="border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
@@ -117,7 +133,7 @@
       bind:value={password}
       class="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-1.5 text-sm outline-none focus:border-[var(--color-accent)]"
     />
-    <!-- 操作按钮：保存、测试、取消 -->
+    <!-- 操作按钮：保存、测试、删除、取消 -->
     <div class="flex gap-2 pt-1">
       <button
         class="rounded-md bg-[var(--color-accent)] px-3 py-1.5 text-sm text-white hover:bg-[var(--color-accent-hover)]"
@@ -132,6 +148,14 @@
       >
         {testing ? $_("connection.testing") : $_("connection.test")}
       </button>
+      {#if editId}
+        <button
+          class="rounded-md border border-[var(--color-danger)] px-3 py-1.5 text-sm text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10"
+          onclick={handleDelete}
+        >
+          {$_("connection.delete")}
+        </button>
+      {/if}
       <button
         class="rounded-md px-3 py-1.5 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
         onclick={onClose}
