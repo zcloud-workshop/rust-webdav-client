@@ -32,13 +32,25 @@ No test framework is configured (no Rust `#[test]`, no JS test runner).
 
 Two-layer architecture communicating via Tauri IPC (`invoke`):
 
-**Rust backend** (`src-tauri/`): All WebDAV protocol interaction via `reqwest_dav`. 19 Tauri commands across 7 modules in `src-tauri/src/commands/`. State lives in `AppState` (`src-tauri/src/webdav/mod.rs`) — a `Mutex<HashMap<String, WebDavClient>>` for connections and `Mutex<Option<String>>` for the active connection ID. Connection profiles are persisted via `tauri-plugin-store` into `connections.json`.
+**Rust backend** (`src-tauri/`): All WebDAV protocol interaction via `reqwest_dav`. Tauri commands are organized in `src-tauri/src/commands/` by domain: `connection`, `files`, `upload`, `download`, `operations`, `preview`, `edit`. State lives in `AppState` (`src-tauri/src/webdav/mod.rs`). Errors are unified via `AppError` (`src-tauri/src/error.rs`) which implements `Serialize` for IPC transport.
 
-**Svelte 5 frontend** (`src/`): Single-page app using Svelte 5 runes (`$state`) for reactivity. `src/lib/api.ts` wraps all `invoke()` calls. Six store modules in `src/lib/stores/` (`browser`, `connections`, `preview`, `toast`, `theme`, `dialog`) encapsulate domain state. Components organized by feature in `src/lib/components/` (layout, connection, browser, preview, common).
+**Svelte 5 frontend** (`src/`): Single-page app using Svelte 5 runes (`$state`) for reactivity. `src/lib/api.ts` wraps all `invoke()` calls. Store modules in `src/lib/stores/` (`browser`, `connections`, `preview`, `toast`, `theme`, `dialog`) encapsulate domain state with getter functions for reactivity. Components organized by feature in `src/lib/components/` (layout, connection, browser, preview, common).
 
 ### Data flow
 
 Component → store function → `api.ts` `invoke()` → Rust command → `AppState.get_client()` → WebDAV operation → result returned via IPC → store updates reactive state → Svelte re-renders
+
+### Video streaming architecture
+
+WKWebView does not support custom URI schemes for `<video>` playback. Instead, a local HTTP proxy server (`src-tauri/src/streaming.rs`) forwards Range requests to WebDAV:
+
+1. At app startup, `start_http_server()` binds a TCP listener on `localhost:0` (random port) in a dedicated tokio runtime (2 worker threads)
+2. `tokio::net::TcpListener::from_std()` MUST be called inside `rt.block_on()` to register with the IO driver
+3. `start_video_stream` command stores `StreamState { webdav_path, base_url, auth_header }` in `AppState::stream_paths` (a `SharedStreams = Arc<Mutex<HashMap<String, StreamState>>>`) and returns `http://localhost:{port}/stream/{uuid}`
+4. The HTTP proxy forwards Range headers as-is to WebDAV, then streams response body chunks via `response.chunk()` (NOT `response.bytes()` which would buffer the entire file)
+5. Response headers include `Accept-Ranges: bytes`, forwarded `Content-Range`/`Content-Length`, CORS headers, and MIME type guessed from file extension
+
+Critical constraints: must use `localhost` (not `127.0.0.1`) to match the webview origin; must stream rather than buffer large files.
 
 ### Key patterns
 
@@ -54,9 +66,9 @@ Component → store function → `api.ts` `invoke()` → Rust command → `AppSt
 
 ## Key Dependencies
 
-Rust: `tauri 2`, `reqwest_dav 0.3`, `tokio 1` (full), `tauri-plugin-store/dialog/fs 2`, `thiserror 2`, `serde/serde_json`, `uuid 1`
+Rust: `tauri 2`, `reqwest 0.13`, `reqwest_dav 0.3`, `tokio 1` (full), `tauri-plugin-store/dialog/fs 2`, `thiserror 2`, `serde/serde_json 1`, `uuid 1`, `base64 0.22`, `log 0.4`
 
-Frontend: `svelte ^5`, `@tauri-apps/api ^2`, `pdfjs-dist`, `docx-preview`, `xlsx` (SheetJS), `svelte-i18n`, `tailwindcss 4`, `vite 8`
+Frontend: `svelte ^5`, `@tauri-apps/api ^2`, `pdfjs-dist ^5`, `docx-preview ^0.3`, `xlsx ^0.18` (SheetJS), `svelte-i18n ^4`, `tailwindcss ^4`, `vite ^8`
 
 ## Requirements
 

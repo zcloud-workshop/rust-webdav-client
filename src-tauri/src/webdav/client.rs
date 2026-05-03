@@ -14,21 +14,23 @@ use tokio::time::timeout;
 /// 封装 reqwest_dav::Client，提供路径规范化和超时保护
 #[derive(Clone)]
 pub struct WebDavClient {
-    /// 底层 reqwest_dav 客户端
     client: reqwest_dav::Client,
-    /// WebDAV 服务器基础 URL
     base_url: String,
+    username: String,
+    password: String,
 }
 
 impl WebDavClient {
-    /// 克隆客户端实例
-    ///
-    /// 用于在释放锁后继续使用客户端
-    pub fn clone_client(other: &Self) -> Self {
-        Self {
-            client: other.client.clone(),
-            base_url: other.base_url.clone(),
-        }
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+
+    pub fn auth_header(&self) -> String {
+        use base64::Engine;
+        let credentials = format!("{}:{}", self.username, self.password);
+        let encoded =
+            base64::engine::general_purpose::STANDARD.encode(credentials.as_bytes());
+        format!("Basic {}", encoded)
     }
 
     /// 创建新的 WebDAV 客户端
@@ -46,6 +48,8 @@ impl WebDavClient {
         Ok(Self {
             client,
             base_url: profile.url.clone(),
+            username: profile.username.clone(),
+            password: profile.password.clone(),
         })
     }
 
@@ -133,7 +137,6 @@ impl WebDavClient {
     pub async fn download(&self, path: &str) -> Result<Vec<u8>, AppError> {
         let normalized_path = Self::normalize_path(path);
         log::debug!("Downloading from: {}", normalized_path);
-        // 请求超时 30 秒，下载超时 60 秒
         let response = timeout(Duration::from_secs(30), self.client.get(&normalized_path))
             .await
             .map_err(|_| AppError::WebDav("Request timeout".to_string()))??;

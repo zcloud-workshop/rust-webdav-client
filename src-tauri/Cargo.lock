@@ -3018,7 +3018,9 @@ dependencies = [
 name = "rust-webdev-client"
 version = "0.1.0"
 dependencies = [
+ "base64 0.22.1",
  "log",
+ "reqwest",
  "reqwest_dav",
  "serde",
  "serde_json",

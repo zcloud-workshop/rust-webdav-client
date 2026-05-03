@@ -8,12 +8,14 @@
     getIsEditing,
     getData,
     getError,
+    getVideoSrc,
     close,
     setEditing,
   } from "../../stores/preview.svelte";
   import TextPreview from "./TextPreview.svelte";
   import ImagePreview from "./ImagePreview.svelte";
   import MediaPreview from "./MediaPreview.svelte";
+  import VideoPreview from "./VideoPreview.svelte";
   import PdfPreview from "./PdfPreview.svelte";
   import OfficePreview from "./OfficePreview.svelte";
   import UnsupportedPreview from "./UnsupportedPreview.svelte";
@@ -69,8 +71,10 @@
         <ImagePreview data={getData() as ArrayBuffer} />
       {:else if getFileType() === "pdf"}
         <PdfPreview data={getData() as ArrayBuffer} />
-      {:else if getFileType() === "audio" || getFileType() === "video"}
-        <MediaPreview data={getData() as ArrayBuffer} type={(getFileType() as "audio" | "video")} fileName={getFileName()!} />
+      {:else if getFileType() === "audio"}
+        <MediaPreview data={getData() as ArrayBuffer} type="audio" fileName={getFileName()!} />
+      {:else if getFileType() === "video"}
+        <VideoPreview videoSrc={getVideoSrc()} fileName={getFileName()!} />
       {:else if getFileType() === "docx" || getFileType() === "xlsx"}
         <OfficePreview data={getData() as ArrayBuffer} type={(getFileType() as "docx" | "xlsx")} />
       {:else}
