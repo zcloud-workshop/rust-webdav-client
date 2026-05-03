@@ -75,6 +75,12 @@ export const api = {
     /** 获取文件预览数据，支持取消请求 */
     getPreviewData: (path: string, size: number | null, signal?: AbortSignal) =>
       invoke<ArrayBuffer | number[]>("get_preview_data", { path, size }, { signal }),
+    /** 启动视频流，返回 HTTP URL */
+    startVideoStream: (path: string) =>
+      invoke<string>("start_video_stream", { path }),
+    /** 停止视频流 */
+    stopVideoStream: (streamId: string) =>
+      invoke("stop_video_stream", { streamId }),
   },
 
   /** 文本编辑相关 API */
