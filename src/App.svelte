@@ -13,6 +13,8 @@
 
   /** 是否已连接到 WebDAV 服务器 */
   let connected = $state(false);
+  /** 是否为 Windows 平台（需要自定义标题栏） */
+  let isWindows = $state(false);
 
   const MIN_WIDTH = 200;
   const MAX_WIDTH = 400;
@@ -55,6 +57,12 @@
   }
 
   onMount(() => {
+    // Windows 上移除原生标题栏，使用自定义 TitleBar
+    if (navigator.userAgent.includes("Windows")) {
+      isWindows = true;
+      getCurrentWindow().setDecorations(false);
+    }
+
     // 退出确认流程：Rust 侧发射 close-requested → 前端弹确认框 → 确认后调用 confirm_exit
     const unlisten = getCurrentWindow().listen("close-requested", async () => {
       const confirmed = await showConfirm(
@@ -77,7 +85,9 @@
 
 <!-- 全屏应用容器 - 标题栏 + 侧边栏 + 主内容区布局 -->
 <div class="flex flex-col h-screen w-screen overflow-hidden bg-[var(--color-bg-primary)]">
-  <TitleBar />
+  {#if isWindows}
+    <TitleBar />
+  {/if}
   <div class="flex flex-1 overflow-hidden">
 
     <div
