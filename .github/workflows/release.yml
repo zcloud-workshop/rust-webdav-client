@@ -141,9 +141,14 @@ jobs:
 
           # Sync and detach (retry to handle "resource busy")
           sync
-          for i in 1 2 3; do
-            hdiutil detach "$MOUNT_POINT" -quiet && break
-            sleep 2
+          for i in 1 2 3 4 5; do
+            if hdiutil detach "$MOUNT_POINT" -quiet; then
+              break
+            elif [ "$i" -eq 5 ]; then
+              hdiutil detach "$MOUNT_POINT" -force -quiet
+            else
+              sleep 5
+            fi
           done
 
           # Convert back to compressed, overwrite original
