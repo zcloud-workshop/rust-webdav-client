@@ -34,7 +34,7 @@ Two-layer architecture communicating via Tauri IPC (`invoke`):
 
 **Rust backend** (`src-tauri/`): All WebDAV protocol interaction via `reqwest_dav`. Tauri commands are organized in `src-tauri/src/commands/` by domain: `connection`, `files`, `upload`, `download`, `operations`, `preview`, `edit`. State lives in `AppState` (`src-tauri/src/webdav/mod.rs`). Errors are unified via `AppError` (`src-tauri/src/error.rs`) which implements `Serialize` for IPC transport.
 
-**Svelte 5 frontend** (`src/`): Single-page app using Svelte 5 runes (`$state`) for reactivity. `src/lib/api.ts` wraps all `invoke()` calls. Store modules in `src/lib/stores/` (`browser`, `connections`, `preview`, `toast`, `theme`, `dialog`) encapsulate domain state with getter functions for reactivity. Components organized by feature in `src/lib/components/` (layout, connection, browser, preview, common).
+**Svelte 5 frontend** (`src/`): Single-page app using Svelte 5 runes (`$state`) for reactivity. Entry point is `src/main.ts` which initializes theme, i18n (using `sys-locale` to detect system language), and mounts `App.svelte`. `src/lib/api.ts` wraps all `invoke()` calls. Store modules in `src/lib/stores/` (`browser`, `connections`, `preview`, `toast`, `theme`, `dialog`) encapsulate domain state with getter functions for reactivity. Components organized by feature in `src/lib/components/` (layout, connection, browser, preview, common).
 
 ### Data flow
 
@@ -66,7 +66,7 @@ Critical constraints: must use `localhost` (not `127.0.0.1`) to match the webvie
 
 ## Key Dependencies
 
-Rust: `tauri 2`, `reqwest 0.13`, `reqwest_dav 0.3`, `tokio 1` (full), `tauri-plugin-store/dialog/fs 2`, `thiserror 2`, `serde/serde_json 1`, `uuid 1`, `base64 0.22`, `log 0.4`
+Rust: `tauri 2`, `reqwest 0.13`, `reqwest_dav 0.3`, `tokio 1` (full), `tauri-plugin-store/dialog/fs/shell 2`, `thiserror 2`, `serde/serde_json 1`, `uuid 1`, `base64 0.22`, `log 0.4`, `sys-locale 0.3`
 
 Frontend: `svelte ^5`, `@tauri-apps/api ^2`, `pdfjs-dist ^5`, `docx-preview ^0.3`, `xlsx ^0.18` (SheetJS), `svelte-i18n ^4`, `tailwindcss ^4`, `vite ^8`
 

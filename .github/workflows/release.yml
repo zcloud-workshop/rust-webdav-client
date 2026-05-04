@@ -155,8 +155,10 @@ jobs:
           # Convert back to compressed, overwrite original
           hdiutil convert /tmp/rw.dmg -format UDZO -o "$DMG_PATH" -ov
 
-          # Re-upload to release (replace the original DMG)
-          FILENAME=$(basename "$DMG_PATH")
-          gh release upload "${{ env.RELEASE_TAG }}" "$DMG_PATH" --clobber
+          # Re-upload to release with v-prefixed filename
+          DIR=$(dirname "$DMG_PATH")
+          UPLOAD_PATH="$DIR/WebDAV-Client_${{ env.RELEASE_TAG }}_aarch64.dmg"
+          mv "$DMG_PATH" "$UPLOAD_PATH"
+          gh release upload "${{ env.RELEASE_TAG }}" "$UPLOAD_PATH" --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
