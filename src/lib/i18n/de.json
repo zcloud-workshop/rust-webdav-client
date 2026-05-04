@@ -43,6 +43,7 @@
     "ctxTest": "Verbindung testen",
     "ctxNew": "Neue Verbindung",
     "ctxDelete": "Löschen",
+    "acceptInsecure": "Accept insecure SSL certificates",
     "deleteConfirm": "Verbindung \"{name}\" löschen?"
   },
   "browser": {

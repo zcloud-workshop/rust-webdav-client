@@ -43,6 +43,7 @@
     "ctxTest": "接続テスト",
     "ctxNew": "新規接続",
     "ctxDelete": "削除",
+    "acceptInsecure": "Accept insecure SSL certificates",
     "deleteConfirm": "接続「{name}」を削除しますか？"
   },
   "browser": {

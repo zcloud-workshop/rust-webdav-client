@@ -43,7 +43,8 @@
     "ctxTest": "测试连接",
     "ctxNew": "新建连接",
     "ctxDelete": "删除",
-    "deleteConfirm": "确定删除连接「{name}」吗？"
+    "deleteConfirm": "确定删除连接「{name}」吗？",
+    "acceptInsecure": "允许不安全的 SSL 证书"
   },
   "browser": {
     "root": "根目录",

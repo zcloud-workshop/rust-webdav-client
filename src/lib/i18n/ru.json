@@ -43,6 +43,7 @@
     "ctxTest": "Тест подключения",
     "ctxNew": "Новое подключение",
     "ctxDelete": "Удалить",
+    "acceptInsecure": "Accept insecure SSL certificates",
     "deleteConfirm": "Удалить подключение「{name}」？"
   },
   "browser": {

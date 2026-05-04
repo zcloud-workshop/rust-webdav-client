@@ -14,6 +14,8 @@ export interface ConnectionProfile {
   username: string;
   /** 密码 */
   password: string;
+  /** 是否允许不安全的 SSL 证书 */
+  accept_insecure: boolean;
 }
 
 /** 文件/文件夹元数据 */

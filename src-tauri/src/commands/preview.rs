@@ -33,6 +33,7 @@ pub async fn start_video_stream(
                 webdav_path: path,
                 base_url: client.base_url().to_string(),
                 auth_header: client.auth_header(),
+                accept_insecure: client.accept_insecure(),
             },
         );
 

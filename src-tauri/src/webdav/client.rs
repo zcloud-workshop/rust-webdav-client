@@ -18,11 +18,16 @@ pub struct WebDavClient {
     base_url: String,
     username: String,
     password: String,
+    accept_insecure: bool,
 }
 
 impl WebDavClient {
     pub fn base_url(&self) -> &str {
         &self.base_url
+    }
+
+    pub fn accept_insecure(&self) -> bool {
+        self.accept_insecure
     }
 
     // 供流媒体代理使用。reqwest_dav::Client 内部已处理 auth，
@@ -39,19 +44,29 @@ impl WebDavClient {
     ///
     /// 使用连接配置初始化 HTTP 客户端并设置 Basic Auth
     pub fn new(profile: &ConnectionProfile) -> Result<Self, AppError> {
-        let client = ClientBuilder::new()
+        let mut builder = ClientBuilder::new()
             .set_host(profile.url.clone())
             .set_auth(Auth::Basic(
                 profile.username.clone(),
                 profile.password.clone(),
-            ))
-            .build()?;
+            ));
+
+        if profile.accept_insecure {
+            let agent = reqwest::Client::builder()
+                .danger_accept_invalid_certs(true)
+                .build()
+                .map_err(|e| AppError::WebDav(e.to_string()))?;
+            builder = builder.set_agent(agent);
+        }
+
+        let client = builder.build()?;
 
         Ok(Self {
             client,
             base_url: profile.url.clone(),
             username: profile.username.clone(),
             password: profile.password.clone(),
+            accept_insecure: profile.accept_insecure,
         })
     }
 

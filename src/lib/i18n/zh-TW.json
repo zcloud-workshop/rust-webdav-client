@@ -43,6 +43,7 @@
     "ctxTest": "測試連線",
     "ctxNew": "新增連線",
     "ctxDelete": "刪除",
+    "acceptInsecure": "Accept insecure SSL certificates",
     "deleteConfirm": "確定刪除連線「{name}」嗎？"
   },
   "browser": {

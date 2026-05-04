@@ -19,6 +19,7 @@ pub struct StreamState {
     pub webdav_path: String,
     pub base_url: String,
     pub auth_header: String,
+    pub accept_insecure: bool,
 }
 
 pub struct AppState {

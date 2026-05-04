@@ -42,7 +42,8 @@
     "ctxTest": "Test Connection",
     "ctxNew": "New Connection",
     "ctxDelete": "Delete",
-    "deleteConfirm": "Delete connection \"{name}\"?"
+    "deleteConfirm": "Delete connection \"{name}\"?",
+    "acceptInsecure": "Accept insecure SSL certificates"
   },
   "browser": {
     "root": "Root",

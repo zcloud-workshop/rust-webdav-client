@@ -105,12 +105,13 @@ async fn handle_connection(socket: tokio::net::TcpStream, streams: SharedStreams
                 s.webdav_path.clone(),
                 s.base_url.clone(),
                 s.auth_header.clone(),
+                s.accept_insecure,
             )),
             None => None,
         }
     };
 
-    let (webdav_path, base_url, auth_header) = match stream_info {
+    let (webdav_path, base_url, auth_header, accept_insecure) = match stream_info {
         Some(info) => info,
         None => {
             let _ = writer
@@ -127,7 +128,14 @@ async fn handle_connection(socket: tokio::net::TcpStream, streams: SharedStreams
         reqwest::Method::GET
     };
 
-    let client = reqwest::Client::new();
+    let client = if accept_insecure {
+        reqwest::Client::builder()
+            .danger_accept_invalid_certs(true)
+            .build()
+            .unwrap_or_else(|_| reqwest::Client::new())
+    } else {
+        reqwest::Client::new()
+    };
     let mut req = client
         .request(reqwest_method, &url)
         .header("Authorization", &auth_header);

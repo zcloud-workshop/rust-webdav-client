@@ -25,6 +25,8 @@
   let testing = $state(false);
   /** 密码是否可见 */
   let showPwd = $state(false);
+  /** 是否允许不安全的 SSL 证书 */
+  let acceptInsecure = $state(false);
 
   /** 编辑模式下加载现有配置 */
   $effect(() => {
@@ -35,6 +37,7 @@
       url = existing?.url ?? "";
       username = existing?.username ?? "";
       password = existing?.password ?? "";
+      acceptInsecure = existing?.accept_insecure ?? false;
     });
   });
 
@@ -51,6 +54,7 @@
       url: url.endsWith("/") ? url : url + "/", // 确保 URL 以 / 结尾
       username,
       password,
+      accept_insecure: acceptInsecure,
     };
     try {
       await saveProfile(profile);
@@ -75,6 +79,7 @@
         url: url.endsWith("/") ? url : url + "/",
         username,
         password,
+        accept_insecure: acceptInsecure,
       });
       if (ok) {
         showToast($t("connection.testSuccess"), "success");
@@ -164,6 +169,15 @@
           {/if}
         </button>
       </div>
+      <!-- 允许不安全证书 -->
+      <label class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] select-none">
+        <input
+          type="checkbox"
+          bind:checked={acceptInsecure}
+          class="accent-[var(--color-accent)]"
+        />
+        {$_("connection.acceptInsecure")}
+      </label>
       <!-- 操作按钮 -->
       <div class="flex items-center gap-2 pt-2">
         <button

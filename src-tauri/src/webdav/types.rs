@@ -17,6 +17,9 @@ pub struct ConnectionProfile {
     pub username: String,
     /// 密码
     pub password: String,
+    /// 是否接受不安全的 SSL 证书（自签名等）
+    #[serde(default)]
+    pub accept_insecure: bool,
 }
 
 /// 文件元数据
