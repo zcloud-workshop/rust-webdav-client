@@ -100,19 +100,3 @@ pnpm tauri dev
 # 构建生产版本
 pnpm tauri build
 ```
-
-## 发布
-
-项目配置了 GitHub Actions 自动构建发布。推送 `v*` 标签即可触发，版本号自动从 git tag 同步到 `package.json` 和 `Cargo.toml`：
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-构建目标：
-
-- macOS Apple Silicon (`.dmg`)
-- Windows x64 (`.exe` 安装包)
-
-构建完成后自动上传到 GitHub Releases，手动确认草稿后发布。
