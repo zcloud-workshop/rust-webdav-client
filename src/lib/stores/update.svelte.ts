@@ -1,8 +1,9 @@
 import { showToast } from "./toast.svelte";
 import { t } from "svelte-i18n";
 import { get } from "svelte/store";
+import { getVersion } from "./version";
 
-const CURRENT_VERSION = "0.1.2";
+const CURRENT_VERSION = getVersion();
 const RELEASES_API = "https://api.github.com/repos/zcloud-workshop/rust-webdav-client/releases/latest";
 const DOWNLOAD_URL = "https://github.com/zcloud-workshop/rust-webdav-client/releases/latest";
 

@@ -114,6 +114,8 @@
     "language": "언어",
     "theme": "테마",
     "autoUpdate": "자동 업데이트 확인",
-    "checkNow": "지금 확인"
+    "checkNow": "지금 확인",
+    "about": "정보",
+    "license": "라이선스"
   }
 }

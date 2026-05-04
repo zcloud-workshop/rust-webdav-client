@@ -113,6 +113,8 @@
     "language": "Language",
     "theme": "Theme",
     "autoUpdate": "Auto Check Updates",
-    "checkNow": "Check Now"
+    "checkNow": "Check Now",
+    "about": "About",
+    "license": "License"
   }
 }

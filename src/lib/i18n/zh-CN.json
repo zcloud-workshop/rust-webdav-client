@@ -114,6 +114,8 @@
     "language": "语言",
     "theme": "主题",
     "autoUpdate": "自动检查更新",
-    "checkNow": "立即检查"
+    "checkNow": "立即检查",
+    "about": "关于",
+    "license": "开源许可证"
   }
 }

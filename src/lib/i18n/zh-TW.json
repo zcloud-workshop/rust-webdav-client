@@ -114,6 +114,8 @@
     "language": "語言",
     "theme": "主題",
     "autoUpdate": "自動檢查更新",
-    "checkNow": "立即檢查"
+    "checkNow": "立即檢查",
+    "about": "關於",
+    "license": "開源授權"
   }
 }

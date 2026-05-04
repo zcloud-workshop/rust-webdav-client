@@ -114,6 +114,8 @@
     "language": "Sprache",
     "theme": "Design",
     "autoUpdate": "Automatische Update-Prüfung",
-    "checkNow": "Jetzt prüfen"
+    "checkNow": "Jetzt prüfen",
+    "about": "Über",
+    "license": "Lizenz"
   }
 }

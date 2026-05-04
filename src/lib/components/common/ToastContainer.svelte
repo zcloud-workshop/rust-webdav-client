@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getToasts, dismissToast } from "../../stores/toast.svelte";
+  import { open } from "@tauri-apps/plugin-shell";
   import { X } from "lucide-svelte";
 </script>
 
@@ -15,12 +16,10 @@
       >
         <span class="flex-1">{toast.message}</span>
         {#if toast.link}
-          <a
-            href={toast.link}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             class="shrink-0 rounded px-1.5 py-0.5 text-xs font-medium text-[var(--color-accent)] hover:underline"
-          >{toast.linkLabel}</a>
+            onclick={() => { open(toast.link!); dismissToast(toast.id); }}
+          >{toast.linkLabel}</button>
         {/if}
         <button
           class="shrink-0 opacity-60 hover:opacity-100"

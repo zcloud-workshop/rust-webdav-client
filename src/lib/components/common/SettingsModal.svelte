@@ -1,11 +1,16 @@
 <script lang="ts">
   import { _ } from "svelte-i18n";
+  import { open } from "@tauri-apps/plugin-shell";
   import { setLocale } from "../../i18n";
   import { getTheme, setTheme, type Theme } from "../../stores/theme.svelte";
   import { getAutoCheck, setAutoCheck, checkForUpdateNow } from "../../stores/update.svelte";
-  import { X } from "lucide-svelte";
+  import { X, ExternalLink } from "lucide-svelte";
+  import { getVersion } from "../../stores/version";
 
   let { onClose } = $props<{ onClose: () => void }>();
+
+  const GITHUB_URL = "https://github.com/zcloud-workshop/rust-webdav-client";
+  const LICENSE_URL = "https://raw.githubusercontent.com/zcloud-workshop/rust-webdav-client/refs/heads/main/License";
 
   const locales = [
     { code: "en", label: "English" },
@@ -22,6 +27,9 @@
   );
   let theme = $state<Theme>(getTheme());
   let autoCheck = $state(getAutoCheck());
+  let showLicense = $state(false);
+  let licenseText = $state("");
+  let licenseLoading = $state(false);
 
   function handleLocale(next: string) {
     locale = next;
@@ -36,6 +44,24 @@
   function handleAutoCheck() {
     autoCheck = !autoCheck;
     setAutoCheck(autoCheck);
+  }
+
+  async function openLicense() {
+    showLicense = true;
+    if (licenseText) return;
+    licenseLoading = true;
+    try {
+      const res = await fetch(LICENSE_URL);
+      if (res.ok) {
+        licenseText = await res.text();
+      } else {
+        licenseText = "Failed to load license.";
+      }
+    } catch {
+      licenseText = "Failed to load license.";
+    } finally {
+      licenseLoading = false;
+    }
   }
 </script>
 
@@ -118,6 +144,53 @@
           </button>
         </div>
       </div>
+
+      <!-- About -->
+      <div class="border-t border-[var(--color-border)] pt-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-[var(--color-text-primary)]">{$_("settings.about")}</span>
+          <span class="text-xs text-[var(--color-text-secondary)]">v{getVersion()}</span>
+        </div>
+        <div class="mt-2 flex items-center gap-3">
+          <button
+            class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
+            onclick={() => open(GITHUB_URL)}
+          >
+            <ExternalLink class="h-3 w-3" />
+            GitHub
+          </button>
+          <button
+            class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
+            onclick={openLicense}
+          >
+            {$_("settings.license")}
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- License dialog -->
+    {#if showLicense}
+      <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50" onclick={() => showLicense = false}>
+        <div
+          class="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-5 text-sm text-[var(--color-text-primary)]"
+          onclick={(e) => e.stopPropagation()}
+        >
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-sm font-semibold">{$_("settings.license")}</h4>
+            <button class="rounded-md p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]" onclick={() => showLicense = false}>
+              <X class="h-4 w-4" />
+            </button>
+          </div>
+          {#if licenseLoading}
+            <div class="flex items-center justify-center py-8">
+              <div class="h-5 w-5 animate-spin rounded-full border-2 border-[var(--color-accent)] border-t-transparent"></div>
+            </div>
+          {:else}
+            <pre class="whitespace-pre-wrap text-xs leading-relaxed text-[var(--color-text-secondary)]">{licenseText}</pre>
+          {/if}
+        </div>
+      </div>
+    {/if}
   </div>
 </div>

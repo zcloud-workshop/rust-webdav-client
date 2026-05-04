@@ -1,6 +1,6 @@
 [package]
 name = "rust-webdev-client"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 
 [lib]
@@ -24,3 +24,4 @@ thiserror = "2"
 uuid = { version = "1", features = ["v4"] }
 base64 = "0.22"
 log = "0.4"
+tauri-plugin-shell = "2.3.5"
