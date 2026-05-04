@@ -3,6 +3,7 @@
   import { setLocale } from "../../i18n";
   import { getTheme, setTheme, type Theme } from "../../stores/theme.svelte";
   import { getAutoCheck, setAutoCheck, checkForUpdateNow } from "../../stores/update.svelte";
+  import { X } from "lucide-svelte";
 
   let { onClose } = $props<{ onClose: () => void }>();
 
@@ -49,9 +50,7 @@
         class="rounded-md p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
         onclick={onClose}
       >
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <X class="h-4 w-4" />
       </button>
     </div>
 

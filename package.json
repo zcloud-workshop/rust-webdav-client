@@ -17,6 +17,7 @@
     "@tauri-apps/plugin-dialog": "^2.7.0",
     "@tauri-apps/plugin-store": "^2.4.2",
     "docx-preview": "^0.3.7",
+    "lucide-svelte": "^1.0.1",
     "pdfjs-dist": "^5.6.205",
     "svelte": "^5.55.5",
     "svelte-i18n": "^4.0.1",

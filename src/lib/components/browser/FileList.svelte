@@ -24,6 +24,7 @@
   import { api } from "../../api";
   import FileItem from "./FileItem.svelte";
   import ContextMenu from "../common/ContextMenu.svelte";
+  import { Pencil, Copy, ArrowRight, Download, Trash2 } from "lucide-svelte";
 
   function tr(key: string, options?: { values?: Record<string, string | number> }): string {
     return get(t)(key, options)?.toString() || "";
@@ -217,11 +218,11 @@
     x={contextMenu.x}
     y={contextMenu.y}
     items={[
-      { label: "重命名", icon: "✏️", action: handleContextRename },
-      { label: "复制", icon: "📋", action: handleContextCopy },
-      { label: "移动", icon: "➡️", action: handleContextMove },
-      { label: "下载", icon: "⬇️", action: handleContextDownload },
-      { label: "删除", icon: "🗑️", action: handleContextDelete },
+      { label: "重命名", icon: Pencil, action: handleContextRename },
+      { label: "复制", icon: Copy, action: handleContextCopy },
+      { label: "移动", icon: ArrowRight, action: handleContextMove },
+      { label: "下载", icon: Download, action: handleContextDownload },
+      { label: "删除", icon: Trash2, action: handleContextDelete },
     ]}
     onClose={closeContextMenu}
   />

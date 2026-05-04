@@ -1,9 +1,12 @@
 <!-- 右键菜单组件 -->
 <script lang="ts">
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type IconComponent = new (...args: any[]) => any;
+
   let { x = 0, y = 0, items, onClose } = $props<{
     x: number;
     y: number;
-    items: { label: string; icon?: string; action: () => void }[];
+    items: { label: string; icon?: IconComponent; action: () => void }[];
     onClose: () => void;
   }>();
 
@@ -30,12 +33,13 @@
   onclick={onClose}
 >
   {#each items as item}
+    {@const Icon = item.icon}
     <button
       class="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
       onclick={item.action}
     >
-      {#if item.icon}
-        <span class="w-4 text-center">{item.icon}</span>
+      {#if Icon}
+        <Icon class="h-4 w-4 shrink-0" />
       {/if}
       <span>{item.label}</span>
     </button>

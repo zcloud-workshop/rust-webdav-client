@@ -19,6 +19,7 @@
   import PdfPreview from "./PdfPreview.svelte";
   import OfficePreview from "./OfficePreview.svelte";
   import UnsupportedPreview from "./UnsupportedPreview.svelte";
+  import { X } from "lucide-svelte";
 
   /** 键盘事件处理 - ESC 关闭预览 */
   function handleKeydown(e: KeyboardEvent) {
@@ -37,7 +38,7 @@
       onclick={close}
       title={$_("preview.close")}
     >
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      <X class="h-4 w-4" />
     </button>
     <span class="flex-1 truncate text-sm font-medium">{getFileName()}</span>
     <!-- 文本文件显示编辑/预览切换按钮 -->
