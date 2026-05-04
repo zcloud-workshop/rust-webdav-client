@@ -139,9 +139,12 @@ jobs:
           # Copy install instructions into DMG
           cp INSTALL-macOS.txt "$MOUNT_POINT/"
 
-          # Sync and detach
+          # Sync and detach (retry to handle "resource busy")
           sync
-          hdiutil detach "$MOUNT_POINT" -quiet
+          for i in 1 2 3; do
+            hdiutil detach "$MOUNT_POINT" -quiet && break
+            sleep 2
+          done
 
           # Convert back to compressed, overwrite original
           hdiutil convert /tmp/rw.dmg -format UDZO -o "$DMG_PATH" -quiet
