@@ -85,6 +85,7 @@
   </div>
 
   {#if !collapsed}
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div
       class="group relative z-10 flex w-1 shrink-0 cursor-col-resize items-center justify-center bg-transparent hover:bg-[var(--color-accent)]/20"
       role="separator"

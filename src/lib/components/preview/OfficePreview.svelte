@@ -30,11 +30,11 @@
 <div bind:this={containerEl} class="h-full overflow-auto p-4 office-preview"></div>
 
 <style>
-  .office-preview table {
+  .office-preview :global(table) {
     border-collapse: collapse;
     width: 100%;
   }
-  .office-preview td, .office-preview th {
+  .office-preview :global(td), .office-preview :global(th) {
     border: 1px solid var(--color-border);
     padding: 4px 8px;
     font-size: 0.875rem;

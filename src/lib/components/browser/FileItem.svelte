@@ -13,8 +13,8 @@
     readonly?: boolean;
   }>();
 
-  const category = getFileCategory(item.name, item.content_type);
-  const icon = getFileIcon(category, item.is_dir);
+  const category = $derived(getFileCategory(item.name, item.content_type));
+  const icon = $derived(getFileIcon(category, item.is_dir));
 
   function handleCheckboxClick(e: Event) {
     e.stopPropagation();
