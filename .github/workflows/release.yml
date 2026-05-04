@@ -120,3 +120,34 @@ jobs:
           tauriScript: pnpm tauri
           args: --target ${{ matrix.target }}
           assetNamePattern: "WebDAV-Client_v[version]-[arch][setup][ext]"
+
+      - name: Add install instructions to macOS DMG
+        if: matrix.target == 'aarch64-apple-darwin'
+        run: |
+          DMG_PATH=$(find src-tauri/target -name "*.dmg" -path "*/bundle/dmg/*" | head -1)
+          if [ -z "$DMG_PATH" ]; then echo "No DMG found"; exit 1; fi
+          echo "DMG: $DMG_PATH"
+
+          # Convert to read-write
+          hdiutil convert "$DMG_PATH" -format UDRW -o /tmp/rw.dmg -quiet
+
+          # Mount
+          MOUNT=$(hdiutil attach /tmp/rw.dmg -readwrite -nobrowse | tail -1)
+          MOUNT_POINT=$(echo "$MOUNT" | awk '{print $NF}')
+          echo "Mounted at: $MOUNT_POINT"
+
+          # Copy install instructions into DMG
+          cp INSTALL-macOS.txt "$MOUNT_POINT/"
+
+          # Sync and detach
+          sync
+          hdiutil detach "$MOUNT_POINT" -quiet
+
+          # Convert back to compressed, overwrite original
+          hdiutil convert /tmp/rw.dmg -format UDZO -o "$DMG_PATH" -quiet
+
+          # Re-upload to release (replace the original DMG)
+          FILENAME=$(basename "$DMG_PATH")
+          gh release upload "${{ env.RELEASE_TAG }}" "$DMG_PATH" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
