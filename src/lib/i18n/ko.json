@@ -5,6 +5,10 @@
     "quit": "종료",
     "quitCancel": "취소"
   },
+  "sidebar": {
+    "collapse": "사이드바 접기",
+    "expand": "사이드바 펼치기"
+  },
   "connection": {
     "title": "연결",
     "add": "+ 새로 만들기",

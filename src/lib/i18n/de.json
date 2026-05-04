@@ -5,6 +5,10 @@
     "quit": "Beenden",
     "quitCancel": "Abbrechen"
   },
+  "sidebar": {
+    "collapse": "Seitenleiste einklappen",
+    "expand": "Seitenleiste ausklappen"
+  },
   "connection": {
     "title": "Verbindungen",
     "add": "+ Neu",

@@ -5,6 +5,10 @@
     "quit": "終了",
     "quitCancel": "キャンセル"
   },
+  "sidebar": {
+    "collapse": "サイドバーを折りたたむ",
+    "expand": "サイドバーを展開"
+  },
   "connection": {
     "title": "接続",
     "add": "+ 新規",

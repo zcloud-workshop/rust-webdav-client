@@ -5,6 +5,10 @@
     "quit": "Quit",
     "quitCancel": "Cancel"
   },
+  "sidebar": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
+  },
   "connection": {
     "title": "Connections",
     "add": "+ Add",

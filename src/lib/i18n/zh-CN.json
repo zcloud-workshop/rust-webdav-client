@@ -5,6 +5,10 @@
     "quit": "退出",
     "quitCancel": "取消"
   },
+  "sidebar": {
+    "collapse": "收起侧边栏",
+    "expand": "展开侧边栏"
+  },
   "connection": {
     "title": "连接",
     "add": "+ 新建",
