@@ -1,33 +1,22 @@
 /**
  * Toast 通知消息状态管理
- * 提供临时的用户操作反馈
  */
 
-/** Toast 消息接口 */
 export interface Toast {
-  /** 唯一标识符 */
   id: number;
-  /** 消息内容 */
   message: string;
-  /** 消息类型 */
   type: "success" | "error" | "info";
-  /** 可选链接 */
   link?: string;
-  /** 链接文本 */
   linkLabel?: string;
 }
 
-/** 当前显示的 Toast 列表 */
 let toasts = $state<Toast[]>([]);
-/** 下一个 Toast 的 ID */
 let nextId = 0;
 
-/** 获取所有当前显示的 Toast */
 export function getToasts() {
   return toasts;
 }
 
-/** 显示 Toast 通知，默认3秒后自动消失；duration=0 时不自动消失 */
 export function showToast(
   message: string,
   type: Toast["type"] = "info",
@@ -36,7 +25,10 @@ export function showToast(
   linkLabel?: string,
 ) {
   const id = nextId++;
+  // Svelte 5 rune 模式：$state 仅追踪变量赋值，不追踪数组 mutation。
+  // 展开运算符创建新数组引用以触发响应式更新。
   toasts = [...toasts, { id, message, type, link, linkLabel }];
+  // duration=0 表示持久通知（不自动消失），用于更新提醒等需要用户手动关闭的场景
   if (duration > 0) {
     setTimeout(() => {
       dismissToast(id);
@@ -44,7 +36,6 @@ export function showToast(
   }
 }
 
-/** 手动关闭 Toast */
 export function dismissToast(id: number) {
   toasts = toasts.filter((t) => t.id !== id);
 }

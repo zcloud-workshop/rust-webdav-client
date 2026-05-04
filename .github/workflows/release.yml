@@ -83,9 +83,13 @@ jobs:
           npm version "$VERSION" --no-git-tag-version --allow-same-version
           sed -i.bak "s/^version = \".*\"/version = \"$VERSION\"/" package.json && rm package.json.bak
           sed -i.bak "s/^version = \".*\"/version = \"$VERSION\"/" src-tauri/Cargo.toml && rm src-tauri/Cargo.toml.bak
+          echo "============================================"
           echo $VERSION
+          echo "============================================"
           cat src-tauri/Cargo.toml
+          echo "============================================"
           cat package.json
+          echo "============================================"
 
       - name: Build and create GitHub Release
         uses: tauri-apps/tauri-action@action-v0.6.2

@@ -15,11 +15,13 @@
 
   const MIN_WIDTH = 200;
   const MAX_WIDTH = 400;
+  // 必须与 Sidebar.svelte 收起态按钮尺寸保持同步（h-8 + padding）
   const COLLAPSED_WIDTH = 48;
   const DEFAULT_WIDTH = 256;
 
   let sidebarWidth = $state(DEFAULT_WIDTH);
   let collapsed = $state(false);
+  // 拖拽时禁用 CSS transition，避免宽度更新滞后于鼠标
   let dragging = $state(false);
 
   function effectiveWidth() {
@@ -30,6 +32,7 @@
     collapsed = !collapsed;
   }
 
+  // 监听器绑定在 document 而非拖拽手柄上，确保鼠标快速移动离开 4px 宽的手柄时不会「脱手」
   function startDrag(e: MouseEvent) {
     if (collapsed) return;
     e.preventDefault();
@@ -51,6 +54,7 @@
   }
 
   onMount(() => {
+    // 退出确认流程：Rust 侧发射 close-requested → 前端弹确认框 → 确认后调用 confirm_exit
     const unlisten = getCurrentWindow().listen("close-requested", async () => {
       const confirmed = await showConfirm(
         $_("app.quitConfirm"),
@@ -62,6 +66,8 @@
         await invoke("confirm_exit");
       }
     });
+    // listen() 返回 Promise<UnlistenFn>，但 onMount cleanup 必须同步。
+    // 使用 .then() 异步注销，窗口销毁时事件系统会自动清理
     return () => {
       unlisten.then((fn) => fn());
     };

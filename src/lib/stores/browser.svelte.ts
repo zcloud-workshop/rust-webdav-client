@@ -81,7 +81,7 @@ export function toggleSelect(path: string, multi: boolean) {
     } else {
       selectedPaths.add(path);
     }
-    // 创建新 Set 以触发响应式更新
+    // 创建新 Set 以触发 Svelte 5 $state 响应式更新（Set.delete/Set.add 是 mutation 不触发）
     selectedPaths = new Set(selectedPaths);
   } else {
     selectedPaths = new Set([path]);
@@ -131,8 +131,9 @@ export async function refresh() {
 
 /** 按当前排序规则对文件列表排序 */
 function sortItems() {
+  // 展开运算符创建新数组触发 $state 响应式更新（Array.sort() 是 in-place mutation）
   items = [...items].sort((a, b) => {
-    // 目录优先排序
+    // 目录始终排在文件前面（macOS Finder 风格），然后才按排序字段比较
     if (a.is_dir !== b.is_dir) return a.is_dir ? -1 : 1;
 
     let cmp = 0;

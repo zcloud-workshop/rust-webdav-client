@@ -25,6 +25,8 @@ impl WebDavClient {
         &self.base_url
     }
 
+    // 供流媒体代理使用。reqwest_dav::Client 内部已处理 auth，
+    // 但代理服务器需要原始 Authorization 头部来转发请求到上游。
     pub fn auth_header(&self) -> String {
         use base64::Engine;
         let credentials = format!("{}:{}", self.username, self.password);
@@ -87,7 +89,9 @@ impl WebDavClient {
                 ListEntity::Folder(folder) => {
                     let href_path = folder.href.trim_end_matches('/');
                     log::debug!("Folder href: {}", folder.href);
-                    // 跳过目录本身（WebDAV PROPFIND 会返回当前目录）
+                    // 跳过目录自身（PROPFIND Depth:1 返回的第一条）。
+                    // 依赖字符串相等：如果服务器返回的路径格式（编码/斜杠/大小写）
+                    // 与客户端规范化的路径不同，此比较会失败，目录条目会重复出现。
                     if href_path == base_path {
                         continue;
                     }
@@ -134,6 +138,9 @@ impl WebDavClient {
     }
 
     /// 下载文件为字节数组
+    ///
+    /// 两阶段超时：30 秒建立连接 + 接收响应头，60 秒传输正文。
+    /// 正文超时在响应头到达后重新开始计时——慢速服务器不会因为连接阶段的耗时而被截断。
     pub async fn download(&self, path: &str) -> Result<Vec<u8>, AppError> {
         let normalized_path = Self::normalize_path(path);
         log::debug!("Downloading from: {}", normalized_path);
@@ -230,7 +237,8 @@ impl WebDavClient {
 
 /// URL 解码
 ///
-/// 处理 %XX 和 + 编码格式
+/// 使用 application/x-www-form-urlencoded 约定（+ → 空格），不是标准 RFC 3986 的百分号解码。
+/// 部分 WebDAV 服务器（Apache mod_dav 等）在 href 中采用此编码。
 fn urldecode(s: &str) -> String {
     let mut bytes = Vec::with_capacity(s.len());
     let mut iter = s.bytes();

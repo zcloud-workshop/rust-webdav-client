@@ -1,17 +1,24 @@
 //! 本地 HTTP 流式代理服务器
 //!
-//! 在 localhost 上启动，将视频 Range 请求流式代理到 WebDAV 服务器。
-//! WKWebView 的 video 元素不支持自定义 URI scheme，但完全支持 http://localhost。
+//! WKWebView 不支持自定义 URI scheme 的 `<video>` 播放，因此需要在 localhost 上启动本地 HTTP 代理。
+//! Range 请求头部原样转发到 WebDAV 上游，响应体以 chunk 流式传输——不会将大文件完全缓冲在内存中。
+//!
+//! ## 为什么是独立线程 + 独立 tokio runtime？
+//!
+//! Tauri 主事件循环跑在主线程上。如果把 accept loop 放在 Tauri 的 runtime 里，
+//! 大量并发连接可能阻塞 IPC 处理或窗口事件。独立线程 + 2 worker 线程轻量隔离。
 
 use crate::webdav::SharedStreams;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 
-/// 启动 HTTP 流式代理服务器，返回绑定的端口号
 pub fn start_http_server(streams: SharedStreams) -> u16 {
+    // localhost 不能换成 127.0.0.1：WKWebView 把 localhost 视为潜在可信源，
+    // 对自动播放策略和媒体 API 更友好。端口 0 让操作系统分配空闲端口。
     let listener = std::net::TcpListener::bind("localhost:0")
         .expect("Failed to bind streaming server");
     let port = listener.local_addr().unwrap().port();
     eprintln!("[streaming] bound to localhost:{}", port);
+    // tokio 要求 socket 在转换前已设非阻塞模式。set_nonblocking 对 TCP socket 不会失败。
     listener.set_nonblocking(true).ok();
 
     std::thread::spawn(move || {
@@ -86,8 +93,11 @@ async fn handle_connection(socket: tokio::net::TcpStream, streams: SharedStreams
         return;
     }
 
+    // stream_id 来自 UUID v4（由 start_video_stream 命令生成），外部请求无法猜测
     let stream_id = path.trim_start_matches("/stream/");
 
+    // 显式作用域确保锁在 HTTP 请求前释放。上游请求可能持续数分钟（大视频流式传输），
+    // 持有锁会阻塞其他线程启动/停止流
     let stream_info = {
         let map = streams.lock().unwrap();
         match map.get(stream_id) {
@@ -131,12 +141,17 @@ async fn handle_connection(socket: tokio::net::TcpStream, streams: SharedStreams
             let status = response.status().as_u16();
             let resp_headers = response.headers().clone();
 
+            // 很多 WebDAV 服务器不设置 Content-Type 或设为 application/octet-stream，
+            // 而 WKWebView 需要识别为 video/* 才能播放。此时从文件扩展名回退检测 MIME。
             let content_type = resp_headers
                 .get("content-type")
                 .and_then(|v| v.to_str().ok())
                 .unwrap_or_else(|| mime_from_path(&webdav_path))
                 .to_string();
 
+            // Accept-Ranges: bytes 是必须的：浏览器依赖它判断是否支持拖动进度条。
+            // 即使上游不支持 Range，我们仍然声明支持（浏览器会回退到全文件加载）。
+            // CORS 头必须无条件发送，因为 video 元素加载的 localhost 源与 webview 源不同。
             let mut resp = format!(
                 "HTTP/1.1 {}\r\nAccept-Ranges: bytes\r\nContent-Type: {}\r\n",
                 status, content_type
@@ -161,6 +176,9 @@ async fn handle_connection(socket: tokio::net::TcpStream, streams: SharedStreams
             }
 
             if method == "GET" {
+                // 零缓冲流式传输：chunk 到达后立即转发，不累积整个响应体。
+                // 多 GB 的视频文件内存占用恒定（~64KB，reqwest 默认 chunk 大小）。
+                // 不能用 response.bytes().await —— 会把整个文件加载到内存。
                 loop {
                     match response.chunk().await {
                         Ok(Some(chunk)) => {

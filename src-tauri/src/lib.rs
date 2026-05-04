@@ -1,4 +1,19 @@
 //! WebDAV 桌面客户端 Tauri 应用库
+//!
+//! ## 退出确认协议
+//!
+//! 退出流程涉及两层事件和三个阶段：
+//!
+//! 1. **窗口关闭按钮 / Cmd+W** → `WindowEvent::CloseRequested`
+//! 2. **Cmd+Q / Dock 退出** → 自定义菜单项 (避免系统默认直接退出) 或 `RunEvent::ExitRequested`
+//!
+//! 两种路径都发射 `close-requested` 到前端，前端弹出确认对话框。
+//! 用户确认后调用 `confirm_exit`，设置 `ExitConfirmed` 标志位后调用 `app.exit(0)`。
+//!
+//! `app.exit(0)` 会再次触发 `ExitRequested`，此时检测到标志位为 true 则放行。
+//! **标志位必须在 `exit()` 之前设置**，否则 `ExitRequested` 再次拦截 → 无限循环。
+//!
+//! 自定义菜单项替代了系统默认 Quit（后者直接调用 `NSApplication.terminate:` 会跳过确认）。
 
 mod commands;
 mod error;
@@ -12,12 +27,12 @@ use tauri::{
 };
 use webdav::AppState;
 
-/// 用户已确认退出的标志，用于跳出 ExitRequested → prevent_exit 的死循环
 struct ExitConfirmed(AtomicBool);
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let state = AppState::default();
+    // 流媒体端口必须在 Tauri 启动前获取并存储，否则首帧视频请求会拿到端口 0（未初始化的默认值）
     let port = streaming::start_http_server(state.stream_paths.clone());
     *state.streaming_port.lock().unwrap() = port;
 
@@ -54,6 +69,7 @@ pub fn run() {
             commands::app::get_system_locale,
         ])
         .setup(|app| {
+            // 用自定义 Quit 菜单项替代系统默认，让 Cmd+Q 走 close-requested → 确认对话框流程
             let quit = MenuItemBuilder::with_id("custom_quit", "Quit WebDAV Client")
                 .accelerator("CmdOrCtrl+Q")
                 .build(app)?;
@@ -61,7 +77,7 @@ pub fn run() {
             let app_menu = SubmenuBuilder::new(app, "WebDAV Client")
                 .item(&quit)
                 .separator()
-                .item(&PredefinedMenuItem::services(app, None)?)
+                .item(&PredefinedMenuItem::services(app, None)?) // macOS Services 菜单集成
                 .separator()
                 .item(&PredefinedMenuItem::hide(app, None)?)
                 .item(&PredefinedMenuItem::hide_others(app, None)?)
@@ -102,6 +118,7 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
+            // CloseRequested：窗口关闭按钮、Cmd+W。必须拦截 -> 弹确认框
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
                 api.prevent_close();
                 let _ = window.emit("close-requested", ());
@@ -110,10 +127,12 @@ pub fn run() {
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
         .run(|app, event| {
+            // ExitRequested：Cmd+Q（经菜单）、Dock 右键退出、app.exit()。
+            // 如果 ExitConfirmed 已设置（来自 confirm_exit），放行；否则拦截 -> 弹确认框
             if let RunEvent::ExitRequested { api, .. } = event {
                 let confirmed = app.state::<ExitConfirmed>();
                 if confirmed.0.load(Ordering::Relaxed) {
-                    return;
+                    return; // 用户已确认，允许退出
                 }
                 api.prevent_exit();
                 if let Some(window) = app.get_webview_window("main") {

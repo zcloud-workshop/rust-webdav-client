@@ -61,7 +61,7 @@ export async function saveProfile(profile: ConnectionProfile) {
 
 /** 删除连接配置 */
 export async function deleteProfile(id: string) {
-  // 如果是当前活动连接，先断开连接
+  // 先断开再删除，防止 activeId 指向已删除的 profile、后端遗留活跃 client
   if (id === activeId) {
     await disconnect();
   }
@@ -92,7 +92,8 @@ export async function disconnect() {
     try {
       await api.connection.disconnect(activeId);
     } catch {
-      // 忽略断开连接时的错误
+      // 忽略断开连接时的网络错误（服务器可能已不可达）。
+      // 无论后端断开是否成功，前端都清空 activeId，避免 UI 卡在"已连接但不可达"状态。
     }
   }
   activeId = null;

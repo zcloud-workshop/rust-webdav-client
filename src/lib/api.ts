@@ -1,6 +1,10 @@
 /**
  * Tauri IPC API 封装
- * 将所有后端命令封装为前端友好的调用接口
+ *
+ * - AbortSignal 传递给 invoke() 的第三个参数，允许取消在途的 IPC 请求。
+ *   Tauri v2 会将 signal 的 abort 事件传播到底层传输层，丢弃正在等待的响应。
+ * - Vec<u8> 的返回类型声明为 `ArrayBuffer | number[]` 是防御性的：
+ *   Tauri IPC 的二进制序列化格式因版本和传输模式而异，preview store 处理所有变体。
  */
 
 import { invoke } from "@tauri-apps/api/core";

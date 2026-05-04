@@ -1,6 +1,7 @@
 /**
  * 文件预览状态管理
- * 视频文件通过本地 HTTP 代理服务器实时流式播放
+ * 视频文件通过本地 HTTP 代理服务器实时流式播放。
+ * 二进制数据通过 AbortController 支持取消在途请求。
  */
 
 import type { FileCategory } from "../types";
@@ -28,6 +29,7 @@ export function getData() { return data; }
 export function getError() { return error; }
 export function getVideoSrc() { return videoSrc; }
 
+// 防止将大文件完全加载到 ArrayBuffer 中导致渲染进程内存不足
 const PREVIEW_SIZE_LIMIT = 50 * 1024 * 1024;
 
 export async function openFile(
@@ -36,11 +38,13 @@ export async function openFile(
   category: FileCategory,
   size?: number | null,
 ) {
+  // 终止上一个预览的请求，防止旧响应在新预览打开后到达导致状态错乱
   if (abortController) {
     abortController.abort();
   }
   abortController = new AbortController();
 
+  // 清理上一个视频流（服务端 HashMap 条目），防止泄露
   if (streamId) {
     await api.preview.stopVideoStream(streamId);
     streamId = null;
@@ -59,7 +63,8 @@ export async function openFile(
 
     try {
       const url = await api.preview.startVideoStream(path);
-      // url = "http://127.0.0.1:PORT/stream/UUID"
+      // URL 格式必须与 commands/preview.rs 中 start_video_stream 的格式一致：
+      // http://localhost:PORT/stream/UUID
       streamId = url.split("/stream/").pop() || null;
       videoSrc = url;
     } catch (e) {
@@ -101,6 +106,9 @@ export async function openFile(
       data = await api.edit.getTextContent(path, size ?? null, abortController.signal);
     } else {
       const result = await api.preview.getPreviewData(path, size ?? null, abortController.signal);
+      // Tauri IPC 将 Vec<u8> 序列化为不同格式取决于传输层和版本：
+      // Uint8Array（现代 Tauri v2）、ArrayBuffer（标准）、number[]（旧版）、
+      // 或 JSON 对象 {0: 65, 1: 66, ...}（二进制传输失败时的回退）
       let bytes: Uint8Array;
       if (result instanceof Uint8Array) {
         bytes = result;
@@ -117,6 +125,7 @@ export async function openFile(
     }
   } catch (e) {
     console.error("Preview error:", e);
+    // AbortError 是用户切换文件时的正常取消，不是真正的错误，不应展示给用户
     if (!(e instanceof Error && e.name === "AbortError")) {
       error = String(e);
     }
