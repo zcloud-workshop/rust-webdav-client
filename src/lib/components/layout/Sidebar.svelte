@@ -12,7 +12,7 @@
   } from "../../stores/connections.svelte";
   import { showConfirm } from "../../stores/dialog.svelte";
   import { showToast } from "../../stores/toast.svelte";
-  import { ChevronLeft, Settings, Server, Plug, Unplug, Pencil, Zap, Trash2, Plus } from "lucide-svelte";
+  import { PanelLeftClose, PanelLeftOpen, Settings, Server, Plug, Unplug, Pencil, Zap, Trash2, Plus } from "lucide-svelte";
   import ConnectionForm from "../connection/ConnectionForm.svelte";
   import ContextMenu from "../common/ContextMenu.svelte";
   import SettingsModal from "../common/SettingsModal.svelte";
@@ -100,16 +100,22 @@
 </script>
 
 <aside class="flex h-full flex-col border-r border-[var(--color-border)] bg-[var(--color-bg-sidebar)]">
-  <div class="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
+  <div
+    class="flex items-center border-b border-[var(--color-border)] px-3 py-3 {collapsed ? 'justify-center' : 'justify-between'}"
+  >
     {#if !collapsed}
       <h2 class="flex-1 text-center text-sm font-semibold text-[var(--color-text-primary)]">{$_("connection.title")}</h2>
     {/if}
     <button
-      class="shrink-0 rounded-md p-1 text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
+      class="shrink-0 rounded-md p-1.5 text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)] transition-colors"
       onclick={onToggle}
       title={collapsed ? $_("sidebar.expand") : $_("sidebar.collapse")}
     >
-      <ChevronLeft class="h-4 w-4 transition-transform {collapsed ? 'rotate-180' : ''}" />
+      {#if collapsed}
+        <PanelLeftOpen class="h-4 w-4" />
+      {:else}
+        <PanelLeftClose class="h-4 w-4" />
+      {/if}
     </button>
   </div>
 
