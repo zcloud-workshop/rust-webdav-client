@@ -1,0 +1,13 @@
+WebDAV Client - macOS 安装说明
+================================
+1. 首次打开时，macOS 可能会阻止未签名应用：
+   - 方式一：右键点击应用 → 选择「打开」→ 在弹窗中点击「打开」
+   - 方式二：在终端中运行以下命令：
+
+     xattr -c /Applications/WebDAV-Client.app
+
+2. 如果提示「已损坏」，同样在终端运行：
+
+   xattr -cr /Applications/WebDAV-Client.app
+
+3. 重新打开应用即可正常使用
