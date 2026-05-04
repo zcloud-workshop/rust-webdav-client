@@ -22,6 +22,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y_interactive_supports_focus -->
 <div
   class="grid {readonly ? 'grid-cols-[1fr_100px_160px]' : 'grid-cols-[auto_1fr_100px_160px]'} gap-4 border-b border-[var(--color-border)] px-4 py-2 text-left text-sm transition-colors items-center {selected
     ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'

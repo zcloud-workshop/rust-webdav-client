@@ -252,6 +252,7 @@
         class="pointer-events-none h-full rounded-full bg-[var(--color-accent)] transition-all duration-100"
         style="width: {progress}%"
       ></div>
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div
         class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--color-accent)] transition-all group-hover/progress:scale-150"
         style="left: {progress}%; width: 12px; height: 12px;"

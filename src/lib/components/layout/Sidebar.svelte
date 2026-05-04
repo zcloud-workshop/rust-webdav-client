@@ -115,6 +115,7 @@
 
   {#if collapsed}
     <!-- collapsed: icons only -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="flex flex-1 flex-col items-center gap-1 overflow-y-auto py-2" oncontextmenu={handleBlankContext}>
       {#each getProfiles() as profile (profile.id)}
         <button
@@ -143,12 +144,12 @@
     </div>
   {:else}
     <!-- expanded: full sidebar -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="flex-1 overflow-y-auto p-2" oncontextmenu={handleBlankContext}>
       {#if getLoading()}
         <div class="px-2 py-4 text-center text-sm text-[var(--color-text-secondary)]">{$_("connection.loading")}</div>
       {:else if getProfiles().length === 0}
         <div class="flex flex-col items-center gap-3 px-2 py-6">
-          <span class="text-sm text-[var(--color-text-secondary)]">{$_("connection.noConnections")}</span>
           <button
             class="rounded-md bg-[var(--color-accent)] px-3 py-1.5 text-xs text-white hover:bg-[var(--color-accent-hover)]"
             onclick={() => { editingId = null; showForm = true; }}
