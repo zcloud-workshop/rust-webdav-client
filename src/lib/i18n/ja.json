@@ -38,6 +38,7 @@
     "ctxDisconnect": "切断",
     "ctxEdit": "編集",
     "ctxTest": "接続テスト",
+    "ctxNew": "新規接続",
     "ctxDelete": "削除",
     "deleteConfirm": "接続「{name}」を削除しますか？"
   },

@@ -20,6 +20,7 @@
   let showForm = $state(false);
   let editingId = $state<string | null>(null);
   let ctxMenu = $state<{ x: number; y: number; profileId: string } | null>(null);
+  let blankCtx = $state<{ x: number; y: number } | null>(null);
   let showSettings = $state(false);
 
   $effect(() => {
@@ -77,27 +78,35 @@
   function handleContextMenu(e: MouseEvent, profileId: string) {
     e.preventDefault();
     e.stopPropagation();
+    blankCtx = null;
     ctxMenu = { x: e.clientX, y: e.clientY, profileId };
+  }
+
+  function handleBlankContext(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    ctxMenu = null;
+    blankCtx = { x: e.clientX, y: e.clientY };
   }
 </script>
 
 <aside class="flex h-full w-64 flex-col border-r border-[var(--color-border)] bg-[var(--color-bg-sidebar)]">
-  <div class="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
-    <h2 class="text-sm font-semibold text-[var(--color-text-primary)]">{$_("connection.title")}</h2>
-    <button
-      class="rounded-md px-2 py-1 text-xs text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10"
-      onclick={() => { editingId = null; showForm = true; }}
-    >
-      {$_("connection.add")}
-    </button>
+  <div class="border-b border-[var(--color-border)] px-4 py-3">
+    <h2 class="text-center text-sm font-semibold text-[var(--color-text-primary)]">{$_("connection.title")}</h2>
   </div>
 
-  <div class="flex-1 overflow-y-auto p-2">
+  <div class="flex-1 overflow-y-auto p-2" oncontextmenu={handleBlankContext}>
     {#if getLoading()}
       <div class="px-2 py-4 text-center text-sm text-[var(--color-text-secondary)]">{$_("connection.loading")}</div>
     {:else if getProfiles().length === 0}
-      <div class="px-2 py-4 text-center text-sm text-[var(--color-text-secondary)]">
-        {$_("connection.noConnections")}<br />{$_("connection.noConnectionsHint")}
+      <div class="flex flex-col items-center gap-3 px-2 py-6">
+        <span class="text-sm text-[var(--color-text-secondary)]">{$_("connection.noConnections")}</span>
+        <button
+          class="rounded-md bg-[var(--color-accent)] px-3 py-1.5 text-xs text-white hover:bg-[var(--color-accent-hover)]"
+          onclick={() => { editingId = null; showForm = true; }}
+        >
+          {$_("connection.add")}
+        </button>
       </div>
     {:else}
       {#each getProfiles() as profile (profile.id)}
@@ -158,6 +167,17 @@
         { label: $_("connection.ctxDelete"), icon: "🗑", action: () => { const id = ctxMenu!.profileId; ctxMenu = null; handleDelete(id); } },
       ]}
       onClose={() => { ctxMenu = null; }}
+    />
+  {/if}
+
+  {#if blankCtx}
+    <ContextMenu
+      x={blankCtx.x}
+      y={blankCtx.y}
+      items={[
+        { label: $_("connection.ctxNew"), icon: "+", action: () => { editingId = null; showForm = true; blankCtx = null; } },
+      ]}
+      onClose={() => { blankCtx = null; }}
     />
   {/if}
 

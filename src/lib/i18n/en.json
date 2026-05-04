@@ -37,6 +37,7 @@
     "ctxDisconnect": "Disconnect",
     "ctxEdit": "Edit",
     "ctxTest": "Test Connection",
+    "ctxNew": "New Connection",
     "ctxDelete": "Delete",
     "deleteConfirm": "Delete connection \"{name}\"?"
   },

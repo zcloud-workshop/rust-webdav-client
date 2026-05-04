@@ -38,6 +38,7 @@
     "ctxDisconnect": "Trennen",
     "ctxEdit": "Bearbeiten",
     "ctxTest": "Verbindung testen",
+    "ctxNew": "Neue Verbindung",
     "ctxDelete": "Löschen",
     "deleteConfirm": "Verbindung \"{name}\" löschen?"
   },

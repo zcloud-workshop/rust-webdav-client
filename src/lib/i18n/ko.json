@@ -38,6 +38,7 @@
     "ctxDisconnect": "연결 해제",
     "ctxEdit": "편집",
     "ctxTest": "연결 테스트",
+    "ctxNew": "새 연결",
     "ctxDelete": "삭제",
     "deleteConfirm": "연결「{name}」을(를) 삭제하시겠습니까？"
   },

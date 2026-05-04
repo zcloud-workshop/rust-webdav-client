@@ -38,6 +38,7 @@
     "ctxDisconnect": "中斷連線",
     "ctxEdit": "編輯",
     "ctxTest": "測試連線",
+    "ctxNew": "新增連線",
     "ctxDelete": "刪除",
     "deleteConfirm": "確定刪除連線「{name}」嗎？"
   },
