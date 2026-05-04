@@ -117,5 +117,11 @@
     "checkNow": "지금 확인",
     "about": "정보",
     "license": "라이선스"
+  },
+  "titlebar": {
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "restore": "복원",
+    "close": "닫기"
   }
 }

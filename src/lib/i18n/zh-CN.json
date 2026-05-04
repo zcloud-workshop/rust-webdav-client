@@ -117,5 +117,11 @@
     "checkNow": "立即检查",
     "about": "关于",
     "license": "开源许可证"
+  },
+  "titlebar": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "还原",
+    "close": "关闭"
   }
 }

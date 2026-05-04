@@ -7,6 +7,7 @@
   import { showConfirm } from "./lib/stores/dialog.svelte";
   import Sidebar from "./lib/components/layout/Sidebar.svelte";
   import MainContent from "./lib/components/layout/MainContent.svelte";
+  import TitleBar from "./lib/components/layout/TitleBar.svelte";
   import ConfirmDialog from "./lib/components/common/ConfirmDialog.svelte";
   import ToastContainer from "./lib/components/common/ToastContainer.svelte";
 
@@ -74,28 +75,31 @@
   });
 </script>
 
-<!-- 全屏应用容器 - 侧边栏 + 主内容区布局 -->
-<div class="flex h-screen w-screen overflow-hidden bg-[var(--color-bg-primary)]">
+<!-- 全屏应用容器 - 标题栏 + 侧边栏 + 主内容区布局 -->
+<div class="flex flex-col h-screen w-screen overflow-hidden bg-[var(--color-bg-primary)]">
+  <TitleBar />
+  <div class="flex flex-1 overflow-hidden">
 
-  <div
-    class="shrink-0 overflow-hidden {collapsed ? '' : ''}"
-    style="width: {effectiveWidth()}px; transition: width {dragging ? '0s' : '0.2s'} ease;"
-  >
-    <Sidebar bind:connected {collapsed} onToggle={toggleSidebar} />
-  </div>
-
-  {#if !collapsed}
-    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div
-      class="group relative z-10 flex w-1 shrink-0 cursor-col-resize items-center justify-center bg-transparent hover:bg-[var(--color-accent)]/20"
-      role="separator"
-      onmousedown={startDrag}
+      class="shrink-0 overflow-hidden {collapsed ? '' : ''}"
+      style="width: {effectiveWidth()}px; transition: width {dragging ? '0s' : '0.2s'} ease;"
     >
-      <div class="h-8 w-0.5 rounded-full bg-[var(--color-border)] group-hover:bg-[var(--color-accent)]"></div>
+      <Sidebar bind:connected {collapsed} onToggle={toggleSidebar} />
     </div>
-  {/if}
 
-  <MainContent {connected} />
+    {#if !collapsed}
+      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+      <div
+        class="group relative z-10 flex w-1 shrink-0 cursor-col-resize items-center justify-center bg-transparent hover:bg-[var(--color-accent)]/20"
+        role="separator"
+        onmousedown={startDrag}
+      >
+        <div class="h-8 w-0.5 rounded-full bg-[var(--color-border)] group-hover:bg-[var(--color-accent)]"></div>
+      </div>
+    {/if}
+
+    <MainContent {connected} />
+  </div>
 </div>
 
 <!-- 全局确认对话框 -->

@@ -116,5 +116,11 @@
     "checkNow": "Check Now",
     "about": "About",
     "license": "License"
+  },
+  "titlebar": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close"
   }
 }

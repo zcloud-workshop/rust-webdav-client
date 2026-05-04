@@ -117,5 +117,11 @@
     "checkNow": "今すぐ確認",
     "about": "バージョン情報",
     "license": "ライセンス"
+  },
+  "titlebar": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "元に戻す",
+    "close": "閉じる"
   }
 }
