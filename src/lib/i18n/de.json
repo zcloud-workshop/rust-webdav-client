@@ -44,6 +44,9 @@
     "ctxNew": "Neue Verbindung",
     "ctxDelete": "Löschen",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "Ausgeblendete Stammverzeichnisse",
+    "hiddenRootDirsPlaceholder": "Verzeichnisname zum Ausblenden",
+    "loadFromServer": "Vom Server laden",
     "deleteConfirm": "Verbindung \"{name}\" löschen?"
   },
   "browser": {

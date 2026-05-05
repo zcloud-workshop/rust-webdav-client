@@ -20,6 +20,9 @@ pub struct ConnectionProfile {
     /// 是否接受不安全的 SSL 证书（自签名等）
     #[serde(default)]
     pub accept_insecure: bool,
+    /// 根目录下要隐藏的目录名称列表
+    #[serde(default)]
+    pub hidden_root_dirs: Vec<String>,
 }
 
 /// 文件元数据

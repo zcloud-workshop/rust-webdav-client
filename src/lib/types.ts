@@ -16,6 +16,8 @@ export interface ConnectionProfile {
   password: string;
   /** 是否允许不安全的 SSL 证书 */
   accept_insecure: boolean;
+  /** 根目录下要隐藏的目录名称 */
+  hidden_root_dirs: string[];
 }
 
 /** 文件/文件夹元数据 */

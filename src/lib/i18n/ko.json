@@ -44,6 +44,9 @@
     "ctxNew": "새 연결",
     "ctxDelete": "삭제",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "숨겨진 루트 디렉토리",
+    "hiddenRootDirsPlaceholder": "숨길 디렉토리 이름",
+    "loadFromServer": "서버에서 불러오기",
     "deleteConfirm": "연결「{name}」을(를) 삭제하시겠습니까？"
   },
   "browser": {

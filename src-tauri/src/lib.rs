@@ -47,6 +47,7 @@ pub fn run() {
             commands::connection::connect,
             commands::connection::disconnect,
             commands::connection::test_connection,
+            commands::connection::list_remote_root_dirs,
             commands::connection::save_profile,
             commands::connection::load_profiles,
             commands::connection::delete_profile,

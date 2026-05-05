@@ -43,7 +43,10 @@
     "ctxNew": "New Connection",
     "ctxDelete": "Delete",
     "deleteConfirm": "Delete connection \"{name}\"?",
-    "acceptInsecure": "Accept insecure SSL certificates"
+    "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "Hidden root directories",
+    "hiddenRootDirsPlaceholder": "Directory name to hide",
+    "loadFromServer": "Load from server"
   },
   "browser": {
     "root": "Root",

@@ -6,6 +6,7 @@
 import type { FileMetadata, SortBy, SortOrder, ViewMode } from "../types";
 import { api } from "../api";
 import { showToast } from "./toast.svelte";
+import { getActiveProfile } from "./connections.svelte";
 
 /** 当前浏览的目录路径 */
 let currentPath = $state("/");
@@ -119,7 +120,10 @@ export async function refresh() {
   loading = true;
   error = null;
   try {
-    items = await api.files.listDirectory(currentPath);
+    const raw = await api.files.listDirectory(currentPath);
+    items = currentPath === "/"
+      ? filterHiddenItems(raw)
+      : raw;
     sortItems();
   } catch (e) {
     error = String(e);
@@ -127,6 +131,13 @@ export async function refresh() {
   } finally {
     loading = false;
   }
+}
+
+/** 根据当前连接配置过滤根目录下的隐藏项 */
+function filterHiddenItems(rawItems: FileMetadata[]): FileMetadata[] {
+  const hidden = getActiveProfile()?.hidden_root_dirs;
+  if (!hidden || hidden.length === 0) return rawItems;
+  return rawItems.filter((item) => !hidden.includes(item.name));
 }
 
 /** 按当前排序规则对文件列表排序 */

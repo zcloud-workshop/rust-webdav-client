@@ -44,6 +44,9 @@
     "ctxNew": "Новое подключение",
     "ctxDelete": "Удалить",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "Скрытые корневые каталоги",
+    "hiddenRootDirsPlaceholder": "Имя каталога для скрытия",
+    "loadFromServer": "Загрузить с сервера",
     "deleteConfirm": "Удалить подключение「{name}」？"
   },
   "browser": {

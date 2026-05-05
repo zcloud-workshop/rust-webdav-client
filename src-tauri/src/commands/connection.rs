@@ -43,6 +43,16 @@ pub async fn test_connection(profile: ConnectionProfile) -> Result<bool, AppErro
     client.test().await
 }
 
+/// 使用指定连接配置列出远程根目录下的所有文件夹名称
+///
+/// 创建临时客户端，不依赖活动连接状态
+#[tauri::command]
+pub async fn list_remote_root_dirs(profile: ConnectionProfile) -> Result<Vec<String>, AppError> {
+    let client = WebDavClient::new(&profile)?;
+    let items = client.list_dir("/").await?;
+    Ok(items.into_iter().filter(|i| i.is_dir).map(|i| i.name).collect())
+}
+
 /// 保存连接配置到本地存储
 ///
 /// 如果 ID 已存在则更新，否则添加新配置

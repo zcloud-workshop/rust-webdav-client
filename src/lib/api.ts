@@ -20,6 +20,9 @@ export const api = {
     /** 测试连接配置 */
     testConnection: (profile: ConnectionProfile) =>
       invoke<boolean>("test_connection", { profile }),
+    /** 使用指定配置列出远程根目录下的文件夹名称 */
+    listRemoteRootDirs: (profile: ConnectionProfile) =>
+      invoke<string[]>("list_remote_root_dirs", { profile }),
     /** 保存连接配置到本地 */
     saveProfile: (profile: ConnectionProfile) =>
       invoke("save_profile", { profile }),

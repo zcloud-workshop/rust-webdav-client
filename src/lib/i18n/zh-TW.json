@@ -44,6 +44,9 @@
     "ctxNew": "新增連線",
     "ctxDelete": "刪除",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "隱藏的根目錄",
+    "hiddenRootDirsPlaceholder": "要隱藏的目錄名稱",
+    "loadFromServer": "從伺服器載入",
     "deleteConfirm": "確定刪除連線「{name}」嗎？"
   },
   "browser": {

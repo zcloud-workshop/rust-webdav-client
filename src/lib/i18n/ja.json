@@ -44,6 +44,9 @@
     "ctxNew": "新規接続",
     "ctxDelete": "削除",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "非表示のルートディレクトリ",
+    "hiddenRootDirsPlaceholder": "非表示にするディレクトリ名",
+    "loadFromServer": "サーバーから読み込む",
     "deleteConfirm": "接続「{name}」を削除しますか？"
   },
   "browser": {

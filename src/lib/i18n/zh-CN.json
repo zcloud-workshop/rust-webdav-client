@@ -44,7 +44,10 @@
     "ctxNew": "新建连接",
     "ctxDelete": "删除",
     "deleteConfirm": "确定删除连接「{name}」吗？",
-    "acceptInsecure": "允许不安全的 SSL 证书"
+    "acceptInsecure": "允许不安全的 SSL 证书",
+    "hiddenRootDirs": "隐藏的根目录",
+    "hiddenRootDirsPlaceholder": "要隐藏的目录名称",
+    "loadFromServer": "从服务器加载"
   },
   "browser": {
     "root": "根目录",
