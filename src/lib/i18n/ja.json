@@ -117,6 +117,7 @@
     "language": "言語",
     "theme": "テーマ",
     "autoUpdate": "自動アップデート確認",
+    "closeToTray": "閉じる時にトレイに最小化",
     "checkNow": "今すぐ確認",
     "about": "バージョン情報",
     "license": "ライセンス",

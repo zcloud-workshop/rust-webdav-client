@@ -63,16 +63,23 @@
       getCurrentWindow().setDecorations(false);
     }
 
-    // 退出确认流程：Rust 侧发射 close-requested → 前端弹确认框 → 确认后调用 confirm_exit
+    // 退出确认流程：Rust 侧发射 close-requested → 前端根据设置决定行为
     const unlisten = getCurrentWindow().listen("close-requested", async () => {
-      const confirmed = await showConfirm(
-        $_("app.quitConfirm"),
-        $_("dialog.confirmTitle"),
-        $_("app.quit"),
-        $_("app.quitCancel"),
-      );
-      if (confirmed) {
-        await invoke("confirm_exit");
+      const minimizeOnClose = localStorage.getItem("minimizeOnClose");
+      if (minimizeOnClose !== "false") {
+        // 默认：最小化到托盘
+        await invoke("minimize_to_tray");
+      } else {
+        // 关闭开关时：弹确认对话框
+        const confirmed = await showConfirm(
+          $_("app.quitConfirm"),
+          $_("dialog.confirmTitle"),
+          $_("app.quit"),
+          $_("app.quitCancel"),
+        );
+        if (confirmed) {
+          await invoke("confirm_exit");
+        }
       }
     });
     // listen() 返回 Promise<UnlistenFn>，但 onMount cleanup 必须同步。

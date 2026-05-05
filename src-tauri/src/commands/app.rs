@@ -18,6 +18,14 @@ pub async fn confirm_exit(app: tauri::AppHandle, state: tauri::State<'_, AppStat
 }
 
 #[tauri::command]
+pub async fn minimize_to_tray(app: tauri::AppHandle) -> Result<(), ()> {
+    if let Some(window) = app.get_webview_window("main") {
+        window.hide().map_err(|_| ())?;
+    }
+    Ok(())
+}
+
+#[tauri::command]
 pub fn get_system_locale() -> String {
     sys_locale::get_locale().unwrap_or_else(|| String::from("en"))
 }

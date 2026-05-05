@@ -68,6 +68,7 @@ pub fn run() {
             commands::edit::get_text_content,
             commands::edit::save_text_content,
             commands::app::confirm_exit,
+            commands::app::minimize_to_tray,
             commands::app::get_system_locale,
             commands::mount::mount_directory,
             commands::mount::unmount_directory,
@@ -137,7 +138,6 @@ pub fn run() {
                 .item(&quit_item)
                 .build()?;
 
-            let tray_handle = app.handle().clone();
             TrayIconBuilder::new()
                 .icon(app.default_window_icon().cloned().unwrap())
                 .menu(&tray_menu)
@@ -149,9 +149,13 @@ pub fn run() {
                         }
                     }
                     "tray_quit" => {
-                        if let Some(window) = tray_handle.get_webview_window("main") {
-                            let _ = window.emit("close-requested", ());
+                        // 托盘退出：直接退出，不受 minimizeOnClose 设置影响
+                        let state = app.state::<AppState>();
+                        if let Err(e) = crate::commands::mount::unmount_all_inner(&state) {
+                            log::warn!("Failed to unmount all during tray quit: {}", e);
                         }
+                        app.state::<ExitConfirmed>().0.store(true, Ordering::Relaxed);
+                        app.exit(0);
                     }
                     _ => {}
                 })

@@ -117,6 +117,7 @@
     "language": "语言",
     "theme": "主题",
     "autoUpdate": "自动检查更新",
+    "closeToTray": "关闭时最小化到托盘",
     "checkNow": "立即检查",
     "about": "关于",
     "license": "开源许可证",

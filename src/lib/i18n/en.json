@@ -116,6 +116,7 @@
     "language": "Language",
     "theme": "Theme",
     "autoUpdate": "Auto Check Updates",
+    "closeToTray": "Minimize to tray on close",
     "checkNow": "Check Now",
     "about": "About",
     "license": "License",

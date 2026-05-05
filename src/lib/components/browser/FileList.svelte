@@ -167,7 +167,7 @@
     } catch (e) {
       const msg = String(e);
       if (msg.includes("not empty")) {
-        showToast(tr("mount.targetNotEmpty", { values: { path: input || "" } }), "warning");
+        showToast(tr("mount.targetNotEmpty", { values: { path: input || "" } }), "error");
       } else {
         showToast(tr("mount.failed", { values: { error: msg } }), "error");
       }
