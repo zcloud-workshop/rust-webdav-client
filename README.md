@@ -105,6 +105,8 @@ pnpm tauri dev
 pnpm tauri build
 ```
 
+---
+
 ## 鸣谢
 
 感谢所有贡献者：
@@ -112,6 +114,3 @@ pnpm tauri build
 <a href="https://github.com/iliucoco/rust-webdav-client/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=iliucoco/rust-webdav-client" alt="Contributors" />
 </a>
-
----
-

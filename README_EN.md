@@ -105,6 +105,8 @@ pnpm tauri dev
 pnpm tauri build
 ```
 
+---
+
 ## Acknowledgements
 
 Thanks to all contributors:
