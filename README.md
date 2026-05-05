@@ -4,7 +4,9 @@
 
 基于 Tauri 2 + Svelte 5 构建的跨平台 WebDAV 桌面客户端，支持文件浏览、全格式预览、在线编辑和上传下载。
 
+<!-- markdownlint-disable MD033 -->
 <img src="assets/image.png" alt="Screenshot" width="400" />
+<!-- markdownlint-enable MD033 -->
 
 ## 功能
 
@@ -90,7 +92,7 @@ src/lib/                    # Svelte 前端
 
 **环境要求：**
 
-- Node.js >= 18
+- Node.js >= 22
 - Rust >= 1.77
 - pnpm
 
@@ -111,6 +113,8 @@ pnpm tauri build
 
 感谢所有贡献者：
 
-<a href="https://github.com/iliucoco/rust-webdav-client/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=iliucoco/rust-webdav-client" alt="Contributors" />
+<!-- markdownlint-disable MD033 -->
+<a href="https://github.com/zcloud-workshop/rust-webdav-client/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zcloud-workshop/rust-webdav-client" alt="Contributors" />
 </a>
+<!-- markdownlint-enable MD033 -->
