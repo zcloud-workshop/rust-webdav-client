@@ -23,6 +23,7 @@ mod webdav;
 use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager, RunEvent,
 };
 use webdav::AppState;
@@ -121,6 +122,49 @@ pub fn run() {
                     }
                 }
             });
+
+            // 系统托盘图标
+            let show_item = MenuItemBuilder::with_id("tray_show", "Show").build(app)?;
+            let quit_item = MenuItemBuilder::with_id("tray_quit", "Quit").build(app)?;
+            let tray_menu = MenuBuilder::new(app)
+                .item(&show_item)
+                .separator()
+                .item(&quit_item)
+                .build()?;
+
+            let tray_handle = app.handle().clone();
+            TrayIconBuilder::new()
+                .icon(app.default_window_icon().cloned().unwrap())
+                .menu(&tray_menu)
+                .on_menu_event(move |app, event| match event.id().as_ref() {
+                    "tray_show" => {
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                    "tray_quit" => {
+                        if let Some(window) = tray_handle.get_webview_window("main") {
+                            let _ = window.emit("close-requested", ());
+                        }
+                    }
+                    _ => {}
+                })
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
 
             Ok(())
         })
