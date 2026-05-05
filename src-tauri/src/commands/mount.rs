@@ -22,6 +22,17 @@ pub async fn mount_directory(
     local_path: Option<String>,
 ) -> Result<String, AppError> {
     let profile = load_profile_by_id(&app, &connection_id)?;
+
+    // 如果用户指定了本地路径，检查目标是否非空
+    if let Some(ref lp) = local_path {
+        if is_path_non_empty(lp) {
+            return Err(AppError::WebDav(format!(
+                "target directory is not empty: {}",
+                lp
+            )));
+        }
+    }
+
     let url = build_webdav_url(&profile.url, &remote_path);
 
     let local_path = platform_mount(&url, &profile.username, &profile.password, local_path.as_deref())?;
@@ -228,6 +239,11 @@ fn save_profile(app: &tauri::AppHandle, profile: &ConnectionProfile) -> Result<(
         .save()
         .map_err(|e| AppError::Serialization(e.to_string()))?;
     Ok(())
+}
+
+/// 检查路径是否存在且不为空（有子项）
+fn is_path_non_empty(path: &str) -> bool {
+    std::fs::read_dir(path).map_or(false, |mut d| d.next().is_some())
 }
 
 fn mutex_err(e: std::sync::PoisonError<std::sync::MutexGuard<'_, HashMap<String, String>>>) -> AppError {

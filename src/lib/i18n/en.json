@@ -133,7 +133,8 @@
     "failed": "Mount failed: {error}",
     "unmountSuccess": "Unmounted",
     "unmountFailed": "Unmount failed: {error}",
-    "removeConfirm": "Remove mapping for \"{path}\"?"
+    "removeConfirm": "Remove mapping for \"{path}\"?",
+    "targetNotEmpty": "Target directory \"{path}\" is not empty, cannot mount"
   },
   "titlebar": {
     "minimize": "Minimize",

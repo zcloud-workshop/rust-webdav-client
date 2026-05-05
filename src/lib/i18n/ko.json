@@ -134,7 +134,8 @@
     "failed": "마운트 실패：{error}",
     "unmountSuccess": "마운트 해제됨",
     "unmountFailed": "마운트 해제 실패：{error}",
-    "removeConfirm": "마운트「{path}」를 삭제하시겠습니까？"
+    "removeConfirm": "마운트「{path}」를 삭제하시겠습니까？",
+    "targetNotEmpty": "대상 디렉토리「{path}」가 비어 있지 않아 마운트할 수 없습니다"
   },
   "titlebar": {
     "minimize": "최소화",

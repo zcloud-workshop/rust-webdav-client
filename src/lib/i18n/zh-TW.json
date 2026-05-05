@@ -134,7 +134,8 @@
     "failed": "映射失敗：{error}",
     "unmountSuccess": "已取消映射",
     "unmountFailed": "取消映射失敗：{error}",
-    "removeConfirm": "確定刪除映射「{path}」嗎？"
+    "removeConfirm": "確定刪除映射「{path}」嗎？",
+    "targetNotEmpty": "目標目錄「{path}」不為空，無法掛載"
   },
   "titlebar": {
     "minimize": "最小化",

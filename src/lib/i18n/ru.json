@@ -134,7 +134,8 @@
     "failed": "Ошибка подключения：{error}",
     "unmountSuccess": "Отключено",
     "unmountFailed": "Ошибка отключения：{error}",
-    "removeConfirm": "Удалить подключение「{path}」？"
+    "removeConfirm": "Удалить подключение「{path}」？",
+    "targetNotEmpty": "Каталог「{path}」не пуст, подключение невозможно"
   },
   "titlebar": {
     "minimize": "Свернуть",

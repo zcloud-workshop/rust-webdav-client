@@ -165,7 +165,12 @@
       showToast(tr("mount.success", { values: { path: localPath } }), "success");
       await refresh();
     } catch (e) {
-      showToast(tr("mount.failed", { values: { error: String(e) } }), "error");
+      const msg = String(e);
+      if (msg.includes("not empty")) {
+        showToast(tr("mount.targetNotEmpty", { values: { path: input || "" } }), "warning");
+      } else {
+        showToast(tr("mount.failed", { values: { error: msg } }), "error");
+      }
     }
   }
 

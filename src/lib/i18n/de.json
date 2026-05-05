@@ -134,7 +134,8 @@
     "failed": "Einbindung fehlgeschlagen: {error}",
     "unmountSuccess": "Einbindung aufgehoben",
     "unmountFailed": "Aufhebung fehlgeschlagen: {error}",
-    "removeConfirm": "Einbindung \"{path}\" entfernen?"
+    "removeConfirm": "Einbindung \"{path}\" entfernen?",
+    "targetNotEmpty": "Verzeichnis \"{path}\" ist nicht leer, Einbindung nicht möglich"
   },
   "titlebar": {
     "minimize": "Minimieren",

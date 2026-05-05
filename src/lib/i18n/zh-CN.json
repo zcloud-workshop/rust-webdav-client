@@ -134,7 +134,8 @@
     "failed": "映射失败：{error}",
     "unmountSuccess": "已取消映射",
     "unmountFailed": "取消映射失败：{error}",
-    "removeConfirm": "确定删除映射「{path}」吗？"
+    "removeConfirm": "确定删除映射「{path}」吗？",
+    "targetNotEmpty": "目标目录「{path}」不为空，无法挂载"
   },
   "titlebar": {
     "minimize": "最小化",

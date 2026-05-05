@@ -134,7 +134,8 @@
     "failed": "マウント失敗：{error}",
     "unmountSuccess": "マウントを解除しました",
     "unmountFailed": "マウント解除失敗：{error}",
-    "removeConfirm": "マウント「{path}」を削除しますか？"
+    "removeConfirm": "マウント「{path}」を削除しますか？",
+    "targetNotEmpty": "ディレクトリ「{path}」が空でないため、マウントできません"
   },
   "titlebar": {
     "minimize": "最小化",
