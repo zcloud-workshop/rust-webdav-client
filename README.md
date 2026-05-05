@@ -4,7 +4,7 @@
 
 基于 Tauri 2 + Svelte 5 构建的跨平台 WebDAV 桌面客户端，支持文件浏览、全格式预览、在线编辑和上传下载。
 
-<img src="assets/image.png" alt="Screenshot" width="500" />
+<img src="assets/image.png" alt="Screenshot" width="400" />
 
 ## 功能
 

@@ -4,7 +4,7 @@
 
 A cross-platform WebDAV desktop client built with Tauri 2 + Svelte 5, featuring file browsing, full-format preview, in-place editing, and upload/download.
 
-<img src="assets/image.png" alt="Screenshot" width="500" />
+<img src="assets/image.png" alt="Screenshot" width="400" />
 
 ## Features
 
