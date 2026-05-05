@@ -118,7 +118,8 @@
     "autoUpdate": "Auto Check Updates",
     "checkNow": "Check Now",
     "about": "About",
-    "license": "License"
+    "license": "License",
+    "feedback": "Feedback"
   },
   "mount": {
     "manageTitle": "Mount Mappings",

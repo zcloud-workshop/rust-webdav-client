@@ -119,7 +119,8 @@
     "autoUpdate": "自動アップデート確認",
     "checkNow": "今すぐ確認",
     "about": "バージョン情報",
-    "license": "ライセンス"
+    "license": "ライセンス",
+    "feedback": "フィードバック"
   },
   "mount": {
     "manageTitle": "マウント管理",

@@ -119,7 +119,8 @@
     "autoUpdate": "Automatische Update-Prüfung",
     "checkNow": "Jetzt prüfen",
     "about": "Über",
-    "license": "Lizenz"
+    "license": "Lizenz",
+    "feedback": "Feedback"
   },
   "mount": {
     "manageTitle": "Einbindungen",

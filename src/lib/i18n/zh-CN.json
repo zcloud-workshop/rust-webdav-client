@@ -119,7 +119,8 @@
     "autoUpdate": "自动检查更新",
     "checkNow": "立即检查",
     "about": "关于",
-    "license": "开源许可证"
+    "license": "开源许可证",
+    "feedback": "反馈问题"
   },
   "mount": {
     "manageTitle": "挂载映射",

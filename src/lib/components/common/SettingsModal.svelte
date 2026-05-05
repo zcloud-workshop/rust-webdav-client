@@ -159,6 +159,12 @@
           </button>
           <button
             class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
+            onclick={() => open(`${GITHUB_URL}/issues`)}
+          >
+            {$_("settings.feedback")}
+          </button>
+          <button
+            class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
             onclick={openLicense}
           >
             {$_("settings.license")}
