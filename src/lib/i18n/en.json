@@ -43,7 +43,10 @@
     "ctxNew": "New Connection",
     "ctxDelete": "Delete",
     "deleteConfirm": "Delete connection \"{name}\"?",
-    "acceptInsecure": "Accept insecure SSL certificates"
+    "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "Hidden root directories",
+    "hiddenRootDirsPlaceholder": "Directory name to hide",
+    "loadFromServer": "Load from server"
   },
   "browser": {
     "root": "Root",
@@ -113,9 +116,27 @@
     "language": "Language",
     "theme": "Theme",
     "autoUpdate": "Auto Check Updates",
+    "closeToTray": "Minimize to tray on close",
     "checkNow": "Check Now",
     "about": "About",
-    "license": "License"
+    "license": "License",
+    "feedback": "Feedback"
+  },
+  "mount": {
+    "manageTitle": "Mount Mappings",
+    "noMounts": "No mount mappings",
+    "colConnection": "Connection",
+    "colRemote": "Remote Path",
+    "colLocal": "Local Path",
+    "mapToLocal": "Map to local",
+    "localPathPrompt": "Enter local path (leave empty to auto-assign):",
+    "unmap": "Unmap",
+    "success": "Mapped to {path}",
+    "failed": "Mount failed: {error}",
+    "unmountSuccess": "Unmounted",
+    "unmountFailed": "Unmount failed: {error}",
+    "removeConfirm": "Remove mapping for \"{path}\"?",
+    "targetNotEmpty": "Target directory \"{path}\" is not empty, cannot mount"
   },
   "titlebar": {
     "minimize": "Minimize",

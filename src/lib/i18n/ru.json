@@ -44,6 +44,9 @@
     "ctxNew": "Новое подключение",
     "ctxDelete": "Удалить",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "Скрытые корневые каталоги",
+    "hiddenRootDirsPlaceholder": "Имя каталога для скрытия",
+    "loadFromServer": "Загрузить с сервера",
     "deleteConfirm": "Удалить подключение「{name}」？"
   },
   "browser": {
@@ -114,9 +117,27 @@
     "language": "Язык",
     "theme": "Тема",
     "autoUpdate": "Автопроверка обновлений",
+    "closeToTray": "Сворачивать в трей при закрытии",
     "checkNow": "Проверить сейчас",
     "about": "О программе",
-    "license": "Лицензия"
+    "license": "Лицензия",
+    "feedback": "Обратная связь"
+  },
+  "mount": {
+    "manageTitle": "Подключения",
+    "noMounts": "Нет подключений",
+    "colConnection": "Подключение",
+    "colRemote": "Удалённый путь",
+    "colLocal": "Локальный путь",
+    "mapToLocal": "Подключить локально",
+    "localPathPrompt": "Введите локальный путь (пустое поле — авто):",
+    "unmap": "Отключить",
+    "success": "Подключено к {path}",
+    "failed": "Ошибка подключения：{error}",
+    "unmountSuccess": "Отключено",
+    "unmountFailed": "Ошибка отключения：{error}",
+    "removeConfirm": "Удалить подключение「{path}」？",
+    "targetNotEmpty": "Каталог「{path}」не пуст, подключение невозможно"
   },
   "titlebar": {
     "minimize": "Свернуть",

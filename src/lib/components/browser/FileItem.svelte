@@ -28,7 +28,7 @@
     ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
     : 'text-[var(--color-text-primary)] hover:bg-[var(--color-bg-secondary)]'}"
   role="row"
-  oncontextmenu={readonly ? undefined : oncontextmenu}
+  oncontextmenu={oncontextmenu}
 >
   <!-- 选择框 -->
   {#if !readonly}

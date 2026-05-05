@@ -44,7 +44,10 @@
     "ctxNew": "新建连接",
     "ctxDelete": "删除",
     "deleteConfirm": "确定删除连接「{name}」吗？",
-    "acceptInsecure": "允许不安全的 SSL 证书"
+    "acceptInsecure": "允许不安全的 SSL 证书",
+    "hiddenRootDirs": "隐藏的根目录",
+    "hiddenRootDirsPlaceholder": "要隐藏的目录名称",
+    "loadFromServer": "从服务器加载"
   },
   "browser": {
     "root": "根目录",
@@ -114,9 +117,27 @@
     "language": "语言",
     "theme": "主题",
     "autoUpdate": "自动检查更新",
+    "closeToTray": "关闭时最小化到托盘",
     "checkNow": "立即检查",
     "about": "关于",
-    "license": "开源许可证"
+    "license": "开源许可证",
+    "feedback": "反馈问题"
+  },
+  "mount": {
+    "manageTitle": "挂载映射",
+    "noMounts": "暂无挂载映射",
+    "colConnection": "连接",
+    "colRemote": "远端目录",
+    "colLocal": "本地目录",
+    "mapToLocal": "映射到本地",
+    "localPathPrompt": "请输入本地目录路径（留空自动分配）：",
+    "unmap": "取消映射",
+    "success": "已映射到 {path}",
+    "failed": "映射失败：{error}",
+    "unmountSuccess": "已取消映射",
+    "unmountFailed": "取消映射失败：{error}",
+    "removeConfirm": "确定删除映射「{path}」吗？",
+    "targetNotEmpty": "目标目录「{path}」不为空，无法挂载"
   },
   "titlebar": {
     "minimize": "最小化",

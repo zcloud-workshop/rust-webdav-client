@@ -28,6 +28,8 @@ pub struct AppState {
     pub stream_paths: SharedStreams,
     // 0 = 未初始化（sentinel），由 lib.rs 在 Tauri build 前设置
     pub streaming_port: Mutex<u16>,
+    /// 活动挂载：key = "{connection_id}::{remote_path}", value = 本地路径
+    pub active_mounts: Mutex<HashMap<String, String>>,
 }
 
 impl Default for AppState {
@@ -37,6 +39,7 @@ impl Default for AppState {
             active_connection_id: Mutex::new(None),
             stream_paths: Arc::new(Mutex::new(HashMap::new())),
             streaming_port: Mutex::new(0),
+            active_mounts: Mutex::new(HashMap::new()),
         }
     }
 }

@@ -4,6 +4,7 @@
   import { _, t } from "svelte-i18n";
   import { saveProfile, testConnection, getProfiles, deleteProfile } from "../../stores/connections.svelte";
   import { showToast } from "../../stores/toast.svelte";
+  import { api } from "../../api";
   import { X, Eye, EyeOff } from "lucide-svelte";
   import type { ConnectionProfile } from "../../types";
 
@@ -27,6 +28,16 @@
   let showPwd = $state(false);
   /** 是否允许不安全的 SSL 证书 */
   let acceptInsecure = $state(false);
+  /** 隐藏的根目录名称列表 */
+  let hiddenRootDirs = $state<string[]>([]);
+  /** 隐藏目录输入框的当前值 */
+  let hiddenDirInput = $state("");
+  /** 从服务器加载的根目录列表 */
+  let remoteDirs = $state<string[]>([]);
+  /** 是否正在加载远程目录 */
+  let loadingDirs = $state(false);
+  /** 多选列表是否展开 */
+  let showDirPicker = $state(false);
 
   /** 编辑模式下加载现有配置 */
   $effect(() => {
@@ -38,8 +49,58 @@
       username = existing?.username ?? "";
       password = existing?.password ?? "";
       acceptInsecure = existing?.accept_insecure ?? false;
+      hiddenRootDirs = existing?.hidden_root_dirs ?? [];
     });
   });
+
+  /** 添加一个要隐藏的目录名称 */
+  function addHiddenDir() {
+    const trimmed = hiddenDirInput.trim();
+    if (trimmed && !hiddenRootDirs.includes(trimmed)) {
+      hiddenRootDirs = [...hiddenRootDirs, trimmed];
+    }
+    hiddenDirInput = "";
+  }
+
+  /** 移除一个隐藏的目录名称 */
+  function removeHiddenDir(name: string) {
+    hiddenRootDirs = hiddenRootDirs.filter((d) => d !== name);
+  }
+
+  /** 切换目录的隐藏状态（多选列表用） */
+  function toggleHiddenDir(dirName: string) {
+    if (hiddenRootDirs.includes(dirName)) {
+      hiddenRootDirs = hiddenRootDirs.filter((d) => d !== dirName);
+    } else {
+      hiddenRootDirs = [...hiddenRootDirs, dirName];
+    }
+  }
+
+  /** 从服务器加载根目录列表 */
+  async function loadRemoteDirs() {
+    if (!url || !username) {
+      showToast($t("connection.requiredFields"), "error");
+      return;
+    }
+    loadingDirs = true;
+    try {
+      remoteDirs = await api.connection.listRemoteRootDirs({
+        id: "temp",
+        name,
+        url: url.endsWith("/") ? url : url + "/",
+        username,
+        password,
+        accept_insecure: acceptInsecure,
+        hidden_root_dirs: [],
+        mounts: [],
+      });
+      showDirPicker = true;
+    } catch (e) {
+      showToast($t("connection.testError") + " " + e, "error");
+    } finally {
+      loadingDirs = false;
+    }
+  }
 
   /** 保存连接配置 */
   async function handleSave() {
@@ -55,6 +116,8 @@
       username,
       password,
       accept_insecure: acceptInsecure,
+      hidden_root_dirs: hiddenRootDirs,
+      mounts: existing?.mounts ?? [],
     };
     try {
       await saveProfile(profile);
@@ -80,6 +143,8 @@
         username,
         password,
         accept_insecure: acceptInsecure,
+        hidden_root_dirs: hiddenRootDirs,
+        mounts: [],
       });
       if (ok) {
         showToast($t("connection.testSuccess"), "success");
@@ -178,6 +243,69 @@
         />
         {$_("connection.acceptInsecure")}
       </label>
+      <!-- 隐藏根目录设置 -->
+      <div class="space-y-1.5">
+        <span class="text-sm text-[var(--color-text-secondary)]">
+          {$_("connection.hiddenRootDirs")}
+        </span>
+        {#if hiddenRootDirs.length > 0}
+          <div class="flex flex-wrap gap-1.5">
+            {#each hiddenRootDirs as dirName (dirName)}
+              <span class="inline-flex items-center gap-1 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]">
+                {dirName}
+                <button
+                  type="button"
+                  class="text-[var(--color-text-secondary)] hover:text-[var(--color-danger)]"
+                  onclick={() => removeHiddenDir(dirName)}
+                >
+                  <X class="h-3 w-3" />
+                </button>
+              </span>
+            {/each}
+          </div>
+        {/if}
+        <div class="flex gap-1.5">
+          <input
+            type="text"
+            placeholder={$_("connection.hiddenRootDirsPlaceholder")}
+            bind:value={hiddenDirInput}
+            onkeydown={(e) => { if (e.key === "Enter") { e.preventDefault(); addHiddenDir(); } } }
+            class="flex-1 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-1.5 text-sm outline-none focus:border-[var(--color-accent)]"
+          />
+          <button
+            type="button"
+            class="rounded-md border border-[var(--color-border)] px-3 py-1.5 text-sm hover:bg-[var(--color-bg-secondary)]"
+            onclick={addHiddenDir}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            class="rounded-md border border-[var(--color-border)] px-3 py-1.5 text-sm hover:bg-[var(--color-bg-secondary)] whitespace-nowrap"
+            onclick={loadRemoteDirs}
+            disabled={loadingDirs}
+          >
+            {loadingDirs ? $_("connection.loading") : $_("connection.loadFromServer")}
+          </button>
+        </div>
+        {#if showDirPicker && remoteDirs.length > 0}
+          <!-- svelte-ignore a11y_click_events_have_key_events -->
+          <!-- svelte-ignore a11y_no_static_element_interactions -->
+          <div class="max-h-40 overflow-y-auto rounded-md border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-2 space-y-1">
+            {#each remoteDirs as dirName (dirName)}
+              <label class="flex items-center gap-2 text-sm text-[var(--color-text-primary)] cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={hiddenRootDirs.includes(dirName)}
+                  onchange={() => toggleHiddenDir(dirName)}
+                  class="accent-[var(--color-accent)]"
+                />
+                {dirName}
+              </label>
+            {/each}
+          </div>
+        {/if}
+      </div>
       <!-- 操作按钮 -->
       <div class="flex items-center gap-2 pt-2">
         <button

@@ -44,6 +44,9 @@
     "ctxNew": "새 연결",
     "ctxDelete": "삭제",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "숨겨진 루트 디렉토리",
+    "hiddenRootDirsPlaceholder": "숨길 디렉토리 이름",
+    "loadFromServer": "서버에서 불러오기",
     "deleteConfirm": "연결「{name}」을(를) 삭제하시겠습니까？"
   },
   "browser": {
@@ -114,9 +117,27 @@
     "language": "언어",
     "theme": "테마",
     "autoUpdate": "자동 업데이트 확인",
+    "closeToTray": "닫을 때 트레이로 최소화",
     "checkNow": "지금 확인",
     "about": "정보",
-    "license": "라이선스"
+    "license": "라이선스",
+    "feedback": "피드백"
+  },
+  "mount": {
+    "manageTitle": "마운트 관리",
+    "noMounts": "마운트가 없습니다",
+    "colConnection": "연결",
+    "colRemote": "원격 경로",
+    "colLocal": "로컬 경로",
+    "mapToLocal": "로컬에 마운트",
+    "localPathPrompt": "로컬 경로 입력 (빈 칸으로 자동 할당)：",
+    "unmap": "마운트 해제",
+    "success": "{path}에 마운트됨",
+    "failed": "마운트 실패：{error}",
+    "unmountSuccess": "마운트 해제됨",
+    "unmountFailed": "마운트 해제 실패：{error}",
+    "removeConfirm": "마운트「{path}」를 삭제하시겠습니까？",
+    "targetNotEmpty": "대상 디렉토리「{path}」가 비어 있지 않아 마운트할 수 없습니다"
   },
   "titlebar": {
     "minimize": "최소화",

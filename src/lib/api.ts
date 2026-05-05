@@ -20,6 +20,9 @@ export const api = {
     /** 测试连接配置 */
     testConnection: (profile: ConnectionProfile) =>
       invoke<boolean>("test_connection", { profile }),
+    /** 使用指定配置列出远程根目录下的文件夹名称 */
+    listRemoteRootDirs: (profile: ConnectionProfile) =>
+      invoke<string[]>("list_remote_root_dirs", { profile }),
     /** 保存连接配置到本地 */
     saveProfile: (profile: ConnectionProfile) =>
       invoke("save_profile", { profile }),
@@ -95,5 +98,25 @@ export const api = {
     /** 保存文本内容到文件 */
     saveTextContent: (path: string, content: string) =>
       invoke("save_text_content", { path, content }),
+  },
+
+  /** 目录挂载相关 API */
+  mount: {
+    /** 挂载远程目录到本地 */
+    mountDirectory: (connectionId: string, remotePath: string, localPath?: string) =>
+      invoke<string>("mount_directory", { connectionId, remotePath, localPath: localPath ?? null }),
+    /** 卸载指定远程目录 */
+    unmountDirectory: (connectionId: string, remotePath: string) =>
+      invoke("unmount_directory", { connectionId, remotePath }),
+    /** 卸载所有活动挂载 */
+    unmountAll: () => invoke("unmount_all"),
+    /** 自动重新挂载所有已保存的映射 */
+    autoMount: () => invoke("auto_mount"),
+    /** 删除挂载映射：卸载并从 profile 中移除 */
+    removeMount: (connectionId: string, remotePath: string) =>
+      invoke("remove_mount", { connectionId, remotePath }),
+    /** 更新挂载映射的本地路径 */
+    updateMountLocalPath: (connectionId: string, remotePath: string, localPath: string) =>
+      invoke("update_mount_local_path", { connectionId, remotePath, localPath }),
   },
 };

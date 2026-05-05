@@ -18,3 +18,5 @@ pub mod preview;
 pub mod edit;
 /// 应用命令 - 退出应用
 pub mod app;
+/// 挂载命令 - WebDAV 目录映射到本地
+pub mod mount;

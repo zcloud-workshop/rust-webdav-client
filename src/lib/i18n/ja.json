@@ -44,6 +44,9 @@
     "ctxNew": "新規接続",
     "ctxDelete": "削除",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "非表示のルートディレクトリ",
+    "hiddenRootDirsPlaceholder": "非表示にするディレクトリ名",
+    "loadFromServer": "サーバーから読み込む",
     "deleteConfirm": "接続「{name}」を削除しますか？"
   },
   "browser": {
@@ -114,9 +117,27 @@
     "language": "言語",
     "theme": "テーマ",
     "autoUpdate": "自動アップデート確認",
+    "closeToTray": "閉じる時にトレイに最小化",
     "checkNow": "今すぐ確認",
     "about": "バージョン情報",
-    "license": "ライセンス"
+    "license": "ライセンス",
+    "feedback": "フィードバック"
+  },
+  "mount": {
+    "manageTitle": "マウント管理",
+    "noMounts": "マウントがありません",
+    "colConnection": "接続",
+    "colRemote": "リモートパス",
+    "colLocal": "ローカルパス",
+    "mapToLocal": "ローカルにマウント",
+    "localPathPrompt": "ローカルパスを入力（空欄で自動割り当て）：",
+    "unmap": "マウント解除",
+    "success": "{path} にマウントしました",
+    "failed": "マウント失敗：{error}",
+    "unmountSuccess": "マウントを解除しました",
+    "unmountFailed": "マウント解除失敗：{error}",
+    "removeConfirm": "マウント「{path}」を削除しますか？",
+    "targetNotEmpty": "ディレクトリ「{path}」が空でないため、マウントできません"
   },
   "titlebar": {
     "minimize": "最小化",

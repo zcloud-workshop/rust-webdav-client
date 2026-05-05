@@ -23,6 +23,7 @@ mod webdav;
 use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager, RunEvent,
 };
 use webdav::AppState;
@@ -47,6 +48,7 @@ pub fn run() {
             commands::connection::connect,
             commands::connection::disconnect,
             commands::connection::test_connection,
+            commands::connection::list_remote_root_dirs,
             commands::connection::save_profile,
             commands::connection::load_profiles,
             commands::connection::delete_profile,
@@ -66,7 +68,14 @@ pub fn run() {
             commands::edit::get_text_content,
             commands::edit::save_text_content,
             commands::app::confirm_exit,
+            commands::app::minimize_to_tray,
             commands::app::get_system_locale,
+            commands::mount::mount_directory,
+            commands::mount::unmount_directory,
+            commands::mount::unmount_all,
+            commands::mount::auto_mount,
+            commands::mount::remove_mount,
+            commands::mount::update_mount_local_path,
         ])
         .setup(|app| {
             // 用自定义 Quit 菜单项替代系统默认，让 Cmd+Q 走 close-requested → 确认对话框流程
@@ -114,6 +123,57 @@ pub fn run() {
                     }
                 }
             });
+
+            // 系统托盘图标
+            let locale = sys_locale::get_locale().unwrap_or_default();
+            let zh = locale.starts_with("zh");
+            let show_label = if zh { "显示主界面" } else { "Show" };
+            let quit_label = if zh { "退出" } else { "Quit" };
+
+            let show_item = MenuItemBuilder::with_id("tray_show", show_label).build(app)?;
+            let quit_item = MenuItemBuilder::with_id("tray_quit", quit_label).build(app)?;
+            let tray_menu = MenuBuilder::new(app)
+                .item(&show_item)
+                .separator()
+                .item(&quit_item)
+                .build()?;
+
+            TrayIconBuilder::new()
+                .icon(app.default_window_icon().cloned().unwrap())
+                .menu(&tray_menu)
+                .on_menu_event(move |app, event| match event.id().as_ref() {
+                    "tray_show" => {
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                    "tray_quit" => {
+                        // 托盘退出：直接退出，不受 minimizeOnClose 设置影响
+                        let state = app.state::<AppState>();
+                        if let Err(e) = crate::commands::mount::unmount_all_inner(&state) {
+                            log::warn!("Failed to unmount all during tray quit: {}", e);
+                        }
+                        app.state::<ExitConfirmed>().0.store(true, Ordering::Relaxed);
+                        app.exit(0);
+                    }
+                    _ => {}
+                })
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
 
             Ok(())
         })

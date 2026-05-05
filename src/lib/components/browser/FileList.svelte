@@ -22,9 +22,10 @@
   import { showToast } from "../../stores/toast.svelte";
   import { showConfirm } from "../../stores/dialog.svelte";
   import { api } from "../../api";
+  import { getActiveId, getProfiles } from "../../stores/connections.svelte";
   import FileItem from "./FileItem.svelte";
   import ContextMenu from "../common/ContextMenu.svelte";
-  import { Pencil, Copy, ArrowRight, Download, Trash2 } from "lucide-svelte";
+  import { Pencil, Copy, ArrowRight, Download, Trash2, HardDrive } from "lucide-svelte";
 
   function tr(key: string, options?: { values?: Record<string, string | number> }): string {
     return get(t)(key, options)?.toString() || "";
@@ -32,6 +33,9 @@
 
   /** 右键菜单状态 */
   let contextMenu = $state<{ x: number; y: number; path: string } | null>(null);
+
+  /** 映射弹窗状态 */
+  let mountDialog = $state<{ path: string; input: string } | null>(null);
 
   /** 是否为根目录 - 根目录禁止选择和右键操作 */
   let isRoot = $derived(getCurrentPath() === "/");
@@ -128,6 +132,73 @@
     }
   }
 
+  /** 判断目录是否已挂载 */
+  function isMounted(path: string): boolean {
+    const id = getActiveId();
+    if (!id) return false;
+    const profile = getProfiles().find((p) => p.id === id);
+    return profile?.mounts.some((m) => m.remote_path === path) ?? false;
+  }
+
+  /** 右键菜单操作 - 映射到本地（弹出输入框） */
+  function handleContextMount() {
+    if (!contextMenu) return;
+    const path = contextMenu.path;
+    closeContextMenu();
+    const dirName = decodeURIComponent(path.split("/").filter(Boolean).pop() ?? "mount");
+    const defaultPath = navigator.userAgent.includes("Windows")
+      ? "Z:"
+      : `/Volumes/${dirName}`;
+    mountDialog = { path, input: defaultPath };
+  }
+
+  /** 确认映射 */
+  async function confirmMount() {
+    if (!mountDialog) return;
+    const { path, input } = mountDialog;
+    mountDialog = null;
+    const connectionId = getActiveId();
+    if (!connectionId) return;
+
+    try {
+      const localPath = await api.mount.mountDirectory(connectionId, path, input || undefined);
+      showToast(tr("mount.success", { values: { path: localPath } }), "success");
+      await refresh();
+    } catch (e) {
+      const msg = String(e);
+      if (msg.includes("not empty")) {
+        showToast(tr("mount.targetNotEmpty", { values: { path: input || "" } }), "error");
+      } else {
+        showToast(tr("mount.failed", { values: { error: msg } }), "error");
+      }
+    }
+  }
+
+  /** 浏览选择本地目录 */
+  async function browseLocalDir() {
+    if (!mountDialog) return;
+    const { open } = await import("@tauri-apps/plugin-dialog");
+    const selected = await open({ directory: true, multiple: false });
+    if (selected) {
+      mountDialog = { ...mountDialog, input: selected };
+    }
+  }
+
+  /** 右键菜单操作 - 取消映射 */
+  async function handleContextUnmount() {
+    if (!contextMenu) return;
+    const path = contextMenu.path;
+    closeContextMenu();
+    const connectionId = getActiveId();
+    if (!connectionId) return;
+    try {
+      await api.mount.unmountDirectory(connectionId, path);
+      showToast(tr("mount.unmountSuccess"), "success");
+    } catch (e) {
+      showToast(tr("mount.unmountFailed", { values: { error: String(e) } }), "error");
+    }
+  }
+
   /** 处理右键点击 */
   function handleContextMenu(e: MouseEvent, path: string) {
     e.preventDefault();
@@ -220,16 +291,68 @@
 
 <!-- 右键菜单 -->
 {#if contextMenu}
+  {@const ctxItem = getItems().find((i) => i.path === contextMenu!.path)}
+  {@const ctxMounted = ctxItem?.is_dir ? isMounted(contextMenu!.path) : false}
   <ContextMenu
-    x={contextMenu.x}
-    y={contextMenu.y}
-    items={[
-      { label: "重命名", icon: Pencil, action: handleContextRename },
-      { label: "复制", icon: Copy, action: handleContextCopy },
-      { label: "移动", icon: ArrowRight, action: handleContextMove },
-      { label: "下载", icon: Download, action: handleContextDownload },
-      { label: "删除", icon: Trash2, action: handleContextDelete },
-    ]}
+    x={contextMenu!.x}
+    y={contextMenu!.y}
+    items={isRoot
+      ? ctxItem?.is_dir
+        ? [{ label: ctxMounted ? tr("mount.unmap") : tr("mount.mapToLocal"), icon: HardDrive, action: ctxMounted ? handleContextUnmount : handleContextMount }]
+        : []
+      : [
+        ...(ctxItem?.is_dir
+          ? [{ label: ctxMounted ? tr("mount.unmap") : tr("mount.mapToLocal"), icon: HardDrive, action: ctxMounted ? handleContextUnmount : handleContextMount }]
+          : []),
+        { label: "重命名", icon: Pencil, action: handleContextRename },
+        { label: "复制", icon: Copy, action: handleContextCopy },
+        { label: "移动", icon: ArrowRight, action: handleContextMove },
+        { label: "下载", icon: Download, action: handleContextDownload },
+        { label: "删除", icon: Trash2, action: handleContextDelete },
+      ]
+    }
     onClose={closeContextMenu}
   />
+{/if}
+
+<!-- 映射路径输入弹窗 -->
+{#if mountDialog}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onclick={() => { mountDialog = null; }}>
+    <div
+      class="w-full max-w-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-xl"
+      onclick={(e) => e.stopPropagation()}
+    >
+      <div class="px-4 py-3 text-sm font-medium text-[var(--color-text-primary)]">{$_("mount.localPathPrompt")}</div>
+      <div class="px-4 pb-2 flex gap-2">
+        <input
+          type="text"
+          bind:value={mountDialog.input}
+          class="flex-1 min-w-0 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)]"
+          onkeydown={(e) => { if (e.key === "Enter") confirmMount(); if (e.key === "Escape") mountDialog = null; }}
+        />
+        <button
+          class="shrink-0 rounded-md border border-[var(--color-border)] px-3 py-2 text-sm hover:bg-[var(--color-bg-secondary)]"
+          onclick={browseLocalDir}
+        >
+          ...
+        </button>
+      </div>
+      <div class="flex justify-end gap-2 px-4 py-3 border-t border-[var(--color-border)]">
+        <button
+          class="rounded-md px-3 py-1.5 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+          onclick={() => { mountDialog = null; }}
+        >
+          {$_("connection.cancel")}
+        </button>
+        <button
+          class="rounded-md bg-[var(--color-accent)] px-3 py-1.5 text-sm text-white hover:bg-[var(--color-accent-hover)]"
+          onclick={confirmMount}
+        >
+          {$_("connection.save")}
+        </button>
+      </div>
+    </div>
+  </div>
 {/if}

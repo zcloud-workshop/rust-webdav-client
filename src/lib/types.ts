@@ -16,6 +16,18 @@ export interface ConnectionProfile {
   password: string;
   /** 是否允许不安全的 SSL 证书 */
   accept_insecure: boolean;
+  /** 根目录下要隐藏的目录名称 */
+  hidden_root_dirs: string[];
+  /** 已保存的目录挂载映射 */
+  mounts: MountMapping[];
+}
+
+/** 目录挂载映射配置 */
+export interface MountMapping {
+  /** 远程 WebDAV 路径 */
+  remote_path: string;
+  /** 上次挂载的本地路径 */
+  local_path: string | null;
 }
 
 /** 文件/文件夹元数据 */

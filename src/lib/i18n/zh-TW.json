@@ -44,6 +44,9 @@
     "ctxNew": "新增連線",
     "ctxDelete": "刪除",
     "acceptInsecure": "Accept insecure SSL certificates",
+    "hiddenRootDirs": "隱藏的根目錄",
+    "hiddenRootDirsPlaceholder": "要隱藏的目錄名稱",
+    "loadFromServer": "從伺服器載入",
     "deleteConfirm": "確定刪除連線「{name}」嗎？"
   },
   "browser": {
@@ -114,9 +117,27 @@
     "language": "語言",
     "theme": "主題",
     "autoUpdate": "自動檢查更新",
+    "closeToTray": "關閉時最小化到系統匣",
     "checkNow": "立即檢查",
     "about": "關於",
-    "license": "開源授權"
+    "license": "開源授權",
+    "feedback": "回饋問題"
+  },
+  "mount": {
+    "manageTitle": "掛載映射",
+    "noMounts": "暫無掛載映射",
+    "colConnection": "連線",
+    "colRemote": "遠端目錄",
+    "colLocal": "本機目錄",
+    "mapToLocal": "映射到本機",
+    "localPathPrompt": "請輸入本機目錄路徑（留空自動分配）：",
+    "unmap": "取消映射",
+    "success": "已映射到 {path}",
+    "failed": "映射失敗：{error}",
+    "unmountSuccess": "已取消映射",
+    "unmountFailed": "取消映射失敗：{error}",
+    "removeConfirm": "確定刪除映射「{path}」嗎？",
+    "targetNotEmpty": "目標目錄「{path}」不為空，無法掛載"
   },
   "titlebar": {
     "minimize": "最小化",

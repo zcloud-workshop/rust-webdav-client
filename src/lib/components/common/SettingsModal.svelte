@@ -23,6 +23,7 @@
   ];
   let theme = $state<Theme>(getTheme());
   let autoCheck = $state(getAutoCheck());
+  let closeToTray = $state(localStorage.getItem("minimizeOnClose") !== "false");
   let showLicense = $state(false);
   let licenseText = $state("");
   let licenseLoading = $state(false);
@@ -143,6 +144,24 @@
         </div>
       </div>
 
+      <!-- Close to tray -->
+      <!-- svelte-ignore a11y_consider_explicit_label -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-[var(--color-text-primary)]">{$_("settings.closeToTray")}</span>
+        <button
+          class="relative h-5 w-9 rounded-full transition-colors {closeToTray
+            ? 'bg-[var(--color-accent)]'
+            : 'bg-[var(--color-border)]'}"
+          onclick={() => { closeToTray = !closeToTray; localStorage.setItem("minimizeOnClose", String(closeToTray)); }}
+        >
+          <span
+            class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform {closeToTray
+              ? 'left-[18px]'
+              : 'left-0.5'}"
+          ></span>
+        </button>
+      </div>
+
       <!-- About -->
       <div class="border-t border-[var(--color-border)] pt-4">
         <div class="flex items-center justify-between">
@@ -156,6 +175,12 @@
           >
             <ExternalLink class="h-3 w-3" />
             GitHub
+          </button>
+          <button
+            class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
+            onclick={() => open(`${GITHUB_URL}/issues`)}
+          >
+            {$_("settings.feedback")}
           </button>
           <button
             class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:underline"
