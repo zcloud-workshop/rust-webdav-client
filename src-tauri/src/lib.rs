@@ -124,8 +124,13 @@ pub fn run() {
             });
 
             // 系统托盘图标
-            let show_item = MenuItemBuilder::with_id("tray_show", "Show").build(app)?;
-            let quit_item = MenuItemBuilder::with_id("tray_quit", "Quit").build(app)?;
+            let locale = sys_locale::get_locale().unwrap_or_default();
+            let zh = locale.starts_with("zh");
+            let show_label = if zh { "显示" } else { "Show" };
+            let quit_label = if zh { "退出" } else { "Quit" };
+
+            let show_item = MenuItemBuilder::with_id("tray_show", show_label).build(app)?;
+            let quit_item = MenuItemBuilder::with_id("tray_quit", quit_label).build(app)?;
             let tray_menu = MenuBuilder::new(app)
                 .item(&show_item)
                 .separator()
