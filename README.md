@@ -4,7 +4,7 @@
 
 基于 Tauri 2 + Svelte 5 构建的跨平台 WebDAV 桌面客户端，支持文件浏览、全格式预览、在线编辑和上传下载。
 
-![Screenshot](assets/image.png)
+<img src="assets/image.png" alt="Screenshot" width="500" />
 
 ## 功能
 
@@ -104,3 +104,14 @@ pnpm tauri dev
 # 构建生产版本
 pnpm tauri build
 ```
+
+## 鸣谢
+
+感谢所有贡献者：
+
+<a href="https://github.com/iliucoco/rust-webdav-client/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=iliucoco/rust-webdav-client" alt="Contributors" />
+</a>
+
+---
+

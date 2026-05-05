@@ -4,7 +4,7 @@
 
 A cross-platform WebDAV desktop client built with Tauri 2 + Svelte 5, featuring file browsing, full-format preview, in-place editing, and upload/download.
 
-![Screenshot](assets/image.png)
+<img src="assets/image.png" alt="Screenshot" width="500" />
 
 ## Features
 
@@ -104,3 +104,11 @@ pnpm tauri dev
 # Production build
 pnpm tauri build
 ```
+
+## Acknowledgements
+
+Thanks to all contributors:
+
+<a href="https://github.com/iliucoco/rust-webdav-client/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=iliucoco/rust-webdav-client" alt="Contributors" />
+</a>
