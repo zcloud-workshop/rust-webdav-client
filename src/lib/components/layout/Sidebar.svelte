@@ -12,10 +12,11 @@
   } from "../../stores/connections.svelte";
   import { showConfirm } from "../../stores/dialog.svelte";
   import { showToast } from "../../stores/toast.svelte";
-  import { PanelLeftClose, PanelLeftOpen, Settings, Server, Plug, Unplug, Pencil, Zap, Trash2, Plus } from "lucide-svelte";
+  import { PanelLeftClose, PanelLeftOpen, Settings, Server, Plug, Unplug, Pencil, Zap, Trash2, Plus, HardDrive } from "lucide-svelte";
   import ConnectionForm from "../connection/ConnectionForm.svelte";
   import ContextMenu from "../common/ContextMenu.svelte";
   import SettingsModal from "../common/SettingsModal.svelte";
+  import MountsModal from "../common/MountsModal.svelte";
 
   let {
     connected = $bindable(false),
@@ -31,6 +32,7 @@
   let ctxMenu = $state<{ x: number; y: number; profileId: string } | null>(null);
   let blankCtx = $state<{ x: number; y: number } | null>(null);
   let showSettings = $state(false);
+  let showMounts = $state(false);
 
   $effect(() => {
     loadProfiles();
@@ -142,6 +144,13 @@
     <div class="border-t border-[var(--color-border)] p-2">
       <button
         class="flex h-8 w-full items-center justify-center rounded-md text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
+        onclick={() => showMounts = true}
+        title={$_("mount.manageTitle")}
+      >
+        <HardDrive class="h-4 w-4" />
+      </button>
+      <button
+        class="flex h-8 w-full items-center justify-center rounded-md text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
         onclick={() => showSettings = true}
         title={$_("settings.title")}
       >
@@ -186,6 +195,13 @@
     </div>
 
     <div class="border-t border-[var(--color-border)] px-4 py-2">
+      <button
+        class="flex w-full items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
+        onclick={() => showMounts = true}
+      >
+        <HardDrive class="h-4 w-4" />
+        {$_("mount.manageTitle")}
+      </button>
       <button
         class="flex w-full items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs text-[var(--color-text-secondary)] hover:bg-[var(--color-accent)]/10 hover:text-[var(--color-accent)]"
         onclick={() => showSettings = true}
@@ -234,5 +250,9 @@
 
   {#if showSettings}
     <SettingsModal onClose={() => { showSettings = false; }} />
+  {/if}
+
+  {#if showMounts}
+    <MountsModal onClose={() => { showMounts = false; }} />
   {/if}
 </aside>

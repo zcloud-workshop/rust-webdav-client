@@ -121,6 +121,21 @@
     "about": "关于",
     "license": "开源许可证"
   },
+  "mount": {
+    "manageTitle": "挂载映射",
+    "noMounts": "暂无挂载映射",
+    "colConnection": "连接",
+    "colRemote": "远端目录",
+    "colLocal": "本地目录",
+    "mapToLocal": "映射到本地",
+    "localPathPrompt": "请输入本地目录路径（留空自动分配）：",
+    "unmap": "取消映射",
+    "success": "已映射到 {path}",
+    "failed": "映射失败：{error}",
+    "unmountSuccess": "已取消映射",
+    "unmountFailed": "取消映射失败：{error}",
+    "removeConfirm": "确定删除映射「{path}」吗？"
+  },
   "titlebar": {
     "minimize": "最小化",
     "maximize": "最大化",

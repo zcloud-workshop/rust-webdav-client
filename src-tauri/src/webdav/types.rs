@@ -23,6 +23,19 @@ pub struct ConnectionProfile {
     /// 根目录下要隐藏的目录名称列表
     #[serde(default)]
     pub hidden_root_dirs: Vec<String>,
+    /// 已保存的目录挂载映射
+    #[serde(default)]
+    pub mounts: Vec<MountMapping>,
+}
+
+/// 目录挂载映射配置
+#[derive(Clone, Serialize, Deserialize)]
+pub struct MountMapping {
+    /// 远程 WebDAV 路径（如 "/documents"）
+    pub remote_path: String,
+    /// 上次挂载的本地路径（如 "Z:" 或 "/Volumes/documents"）
+    #[serde(default)]
+    pub local_path: Option<String>,
 }
 
 /// 文件元数据

@@ -120,6 +120,21 @@
     "about": "About",
     "license": "License"
   },
+  "mount": {
+    "manageTitle": "Mount Mappings",
+    "noMounts": "No mount mappings",
+    "colConnection": "Connection",
+    "colRemote": "Remote Path",
+    "colLocal": "Local Path",
+    "mapToLocal": "Map to local",
+    "localPathPrompt": "Enter local path (leave empty to auto-assign):",
+    "unmap": "Unmap",
+    "success": "Mapped to {path}",
+    "failed": "Mount failed: {error}",
+    "unmountSuccess": "Unmounted",
+    "unmountFailed": "Unmount failed: {error}",
+    "removeConfirm": "Remove mapping for \"{path}\"?"
+  },
   "titlebar": {
     "minimize": "Minimize",
     "maximize": "Maximize",

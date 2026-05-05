@@ -68,6 +68,12 @@ pub fn run() {
             commands::edit::save_text_content,
             commands::app::confirm_exit,
             commands::app::get_system_locale,
+            commands::mount::mount_directory,
+            commands::mount::unmount_directory,
+            commands::mount::unmount_all,
+            commands::mount::auto_mount,
+            commands::mount::remove_mount,
+            commands::mount::update_mount_local_path,
         ])
         .setup(|app| {
             // 用自定义 Quit 菜单项替代系统默认，让 Cmd+Q 走 close-requested → 确认对话框流程

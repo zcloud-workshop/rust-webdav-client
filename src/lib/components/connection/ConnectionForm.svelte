@@ -92,6 +92,7 @@
         password,
         accept_insecure: acceptInsecure,
         hidden_root_dirs: [],
+        mounts: [],
       });
       showDirPicker = true;
     } catch (e) {
@@ -116,6 +117,7 @@
       password,
       accept_insecure: acceptInsecure,
       hidden_root_dirs: hiddenRootDirs,
+      mounts: existing?.mounts ?? [],
     };
     try {
       await saveProfile(profile);
@@ -142,6 +144,7 @@
         password,
         accept_insecure: acceptInsecure,
         hidden_root_dirs: hiddenRootDirs,
+        mounts: [],
       });
       if (ok) {
         showToast($t("connection.testSuccess"), "success");

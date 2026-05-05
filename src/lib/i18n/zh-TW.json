@@ -121,6 +121,21 @@
     "about": "關於",
     "license": "開源授權"
   },
+  "mount": {
+    "manageTitle": "掛載映射",
+    "noMounts": "暫無掛載映射",
+    "colConnection": "連線",
+    "colRemote": "遠端目錄",
+    "colLocal": "本機目錄",
+    "mapToLocal": "映射到本機",
+    "localPathPrompt": "請輸入本機目錄路徑（留空自動分配）：",
+    "unmap": "取消映射",
+    "success": "已映射到 {path}",
+    "failed": "映射失敗：{error}",
+    "unmountSuccess": "已取消映射",
+    "unmountFailed": "取消映射失敗：{error}",
+    "removeConfirm": "確定刪除映射「{path}」嗎？"
+  },
   "titlebar": {
     "minimize": "最小化",
     "maximize": "最大化",

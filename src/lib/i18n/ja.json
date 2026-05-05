@@ -121,6 +121,21 @@
     "about": "バージョン情報",
     "license": "ライセンス"
   },
+  "mount": {
+    "manageTitle": "マウント管理",
+    "noMounts": "マウントがありません",
+    "colConnection": "接続",
+    "colRemote": "リモートパス",
+    "colLocal": "ローカルパス",
+    "mapToLocal": "ローカルにマウント",
+    "localPathPrompt": "ローカルパスを入力（空欄で自動割り当て）：",
+    "unmap": "マウント解除",
+    "success": "{path} にマウントしました",
+    "failed": "マウント失敗：{error}",
+    "unmountSuccess": "マウントを解除しました",
+    "unmountFailed": "マウント解除失敗：{error}",
+    "removeConfirm": "マウント「{path}」を削除しますか？"
+  },
   "titlebar": {
     "minimize": "最小化",
     "maximize": "最大化",

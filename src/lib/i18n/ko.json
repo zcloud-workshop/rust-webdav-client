@@ -121,6 +121,21 @@
     "about": "정보",
     "license": "라이선스"
   },
+  "mount": {
+    "manageTitle": "마운트 관리",
+    "noMounts": "마운트가 없습니다",
+    "colConnection": "연결",
+    "colRemote": "원격 경로",
+    "colLocal": "로컬 경로",
+    "mapToLocal": "로컬에 마운트",
+    "localPathPrompt": "로컬 경로 입력 (빈 칸으로 자동 할당)：",
+    "unmap": "마운트 해제",
+    "success": "{path}에 마운트됨",
+    "failed": "마운트 실패：{error}",
+    "unmountSuccess": "마운트 해제됨",
+    "unmountFailed": "마운트 해제 실패：{error}",
+    "removeConfirm": "마운트「{path}」를 삭제하시겠습니까？"
+  },
   "titlebar": {
     "minimize": "최소화",
     "maximize": "최대화",

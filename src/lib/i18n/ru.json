@@ -121,6 +121,21 @@
     "about": "О программе",
     "license": "Лицензия"
   },
+  "mount": {
+    "manageTitle": "Подключения",
+    "noMounts": "Нет подключений",
+    "colConnection": "Подключение",
+    "colRemote": "Удалённый путь",
+    "colLocal": "Локальный путь",
+    "mapToLocal": "Подключить локально",
+    "localPathPrompt": "Введите локальный путь (пустое поле — авто):",
+    "unmap": "Отключить",
+    "success": "Подключено к {path}",
+    "failed": "Ошибка подключения：{error}",
+    "unmountSuccess": "Отключено",
+    "unmountFailed": "Ошибка отключения：{error}",
+    "removeConfirm": "Удалить подключение「{path}」？"
+  },
   "titlebar": {
     "minimize": "Свернуть",
     "maximize": "Развернуть",
