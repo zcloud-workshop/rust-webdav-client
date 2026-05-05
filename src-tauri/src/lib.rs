@@ -126,7 +126,7 @@ pub fn run() {
             // 系统托盘图标
             let locale = sys_locale::get_locale().unwrap_or_default();
             let zh = locale.starts_with("zh");
-            let show_label = if zh { "显示" } else { "Show" };
+            let show_label = if zh { "显示主界面" } else { "Show" };
             let quit_label = if zh { "退出" } else { "Quit" };
 
             let show_item = MenuItemBuilder::with_id("tray_show", show_label).build(app)?;
