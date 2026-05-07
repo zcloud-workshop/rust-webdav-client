@@ -117,6 +117,7 @@
     "theme": "Theme",
     "autoUpdate": "Auto Check Updates",
     "closeToTray": "Minimize to tray on close",
+    "autoStart": "Auto Start",
     "checkNow": "Check Now",
     "about": "About",
     "license": "License",
