@@ -113,4 +113,8 @@ pnpm tauri build
 
 Thanks to all contributors:
 
-View all [contributors](https://github.com/zcloud-workshop/rust-webdav-client/graphs/contributors) 🎉
+<!-- markdownlint-disable MD033 -->
+<a href="https://github.com/zcloud-workshop/rust-webdav-client/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zcloud-workshop/rust-webdav-client" alt="Contributors" />
+</a>
+<!-- markdownlint-enable MD033 -->
