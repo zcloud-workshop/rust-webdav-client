@@ -118,6 +118,7 @@
     "theme": "Design",
     "autoUpdate": "Automatische Update-Prüfung",
     "closeToTray": "Beim Schließen in Tray minimieren",
+    "autoStart": "Autostart",
     "checkNow": "Jetzt prüfen",
     "about": "Über",
     "license": "Lizenz",

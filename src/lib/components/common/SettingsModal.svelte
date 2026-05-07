@@ -4,6 +4,7 @@
   import { setLocale } from "../../i18n";
   import { getTheme, setTheme, type Theme } from "../../stores/theme.svelte";
   import { getAutoCheck, setAutoCheck, checkForUpdateNow } from "../../stores/update.svelte";
+  import { isEnabled as isAutostartEnabled, enable as enableAutostart, disable as disableAutostart } from "@tauri-apps/plugin-autostart";
   import { X, ExternalLink, Sun, Moon, Monitor } from "lucide-svelte";
   import { getVersion } from "../../stores/version";
 
@@ -24,6 +25,7 @@
   let theme = $state<Theme>(getTheme());
   let autoCheck = $state(getAutoCheck());
   let closeToTray = $state(localStorage.getItem("minimizeOnClose") !== "false");
+  let autoStart = $state(false);
   let showLicense = $state(false);
   let licenseText = $state("");
   let licenseLoading = $state(false);
@@ -40,6 +42,13 @@
   function handleAutoCheck() {
     autoCheck = !autoCheck;
     setAutoCheck(autoCheck);
+  }
+
+  isAutostartEnabled().then((v) => (autoStart = v)).catch(() => {});
+
+  function handleAutoStart() {
+    autoStart = !autoStart;
+    if (autoStart) enableAutostart(); else disableAutostart();
   }
 
   async function openLicense() {
@@ -156,6 +165,24 @@
         >
           <span
             class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform {closeToTray
+              ? 'left-[18px]'
+              : 'left-0.5'}"
+          ></span>
+        </button>
+      </div>
+
+      <!-- Auto start -->
+      <!-- svelte-ignore a11y_consider_explicit_label -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-[var(--color-text-primary)]">{$_("settings.autoStart")}</span>
+        <button
+          class="relative h-5 w-9 rounded-full transition-colors {autoStart
+            ? 'bg-[var(--color-accent)]'
+            : 'bg-[var(--color-border)]'}"
+          onclick={handleAutoStart}
+        >
+          <span
+            class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform {autoStart
               ? 'left-[18px]'
               : 'left-0.5'}"
           ></span>
